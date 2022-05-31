@@ -82,8 +82,8 @@ af3(:,1:464) = 0;          % do not detect boats at the outskirts
 af3(:,3328:4064) = 0;      % do not detect boats at the outskirts
 
 %% Find SMI spikes
-imgmed = medfilt2(af3,[3 3]);   % median filter image that has no spikes
-imgfilt = (af3 - imgmed);   % subtracting median filter from weiner filter (which has spikes) gives only spikes and thus are candidates for boats
+imgmed = medfilt2(af3,[3 3]);
+imgfilt = (af3 - imgmed);
 
 zsmimax = zeros(ndnb,1);
 dzsmimax = zeros(ndnb,1);
