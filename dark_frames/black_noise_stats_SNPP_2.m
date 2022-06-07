@@ -38,15 +38,16 @@ aggrSNPP = [...
     32 20 11 80 4.2210E-05]
 
 nzSNPP = size(aggrSNPP,1)
-ranges = zeros(2,32);
-ranges(:,1) = [2032 - aggrSNPP(1,4) + 1, 2032];  % the ranges for SNPP is half width, for J1 it is full width (because J1 is assymetric)
+ranges = zeros(2,nzSNPP);
+
+ranges(:,1) = [2032 - aggrSNPP(1,4) + 1];  % the ranges for SNPP is half width, for J1 it is full width (because J1 is assymetric)
 for i=2:32
     ranges(1,i) = ranges(1,i-1) - aggrSNPP(i,4);
     ranges(2,i) = ranges(1,i-1) - 1;
 end
 
 %% SNPP DNB day-night band
-dnbfile = 'SVDNB_npp_d20220430_t1334313_e1335555_b54440_c20220430150901529459_oebc_ops.h5';
+dnbfile = 'SVDNB_npp_d20170128_t1255482_e1301286_b27228_c20170128190129026938_noaa_ops.h5';
 
 % DNB radiance
 dnbdataset = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
@@ -74,22 +75,25 @@ for i = 1:size(dnbdata,2)
     dnbvar(i) = std(dnbdata(:,i));
 end
 
+disp("here");
+disp(mean(dnbvar));
+
 goodrange = 464:3327;
 size(goodrange)
 size(dnbvar(goodrange))
 % [p,S] = polyfit(double(goodrange),dnbvar(goodrange)',2)
-% p = polyfit(double(goodrange),dnbvar(goodrange)',2)
+p = polyfit(double(goodrange),dnbvar(goodrange)',2)
 
 % [polyvar,delta] = polyval(p,goodrange,S);
 % [sigmanoise,sdelta] = polyval(p,1:4064,S);
 
-p = [2.68761561326876e-08,-0.000101778246819055,0.134918217384128 + 0.01]
+% p = [2.68761561326876e-08,-0.000101778246819055,0.134918217384128 + 0.01]
 polyvar = polyval(p,goodrange);
-sigmanoiseJ01 = polyval(p,1:4064);
+sigmanoiseSNPP = polyval(p,1:4064);
 
 %%
 SCALE = 1;
-af3 = single(wiener2(dnbdata,[3 3],SCALE*sigmanoiseJ01));
+af3 = single(wiener2(dnbdata,[3 3],SCALE*sigmanoiseSNPP));
 af3(:,1:464) = 0;
 af3(:,3328:4064) = 0;
 
@@ -177,11 +181,11 @@ plot(Sample_DNB,imgfiltSNPP(imgfiltSNPP > -1000),'.')
 
 hold on
 
-plot(SCALE * sigmanoiseJ01,'g--','LineWidth',4,'DisplayName','Wiener Sigma')
+plot(SCALE * sigmanoiseSNPP,'g--','LineWidth',4,'DisplayName','Wiener Sigma')
 
-for i=1:nzJ01-1
-    vline(rangesJ01(2,i))
-end
+%for i=1:nzSNPP-1
+%    vline(ranges(2,i))
+%end
 
 ylim([-0.1,0.2])
 xlim([0,4100])

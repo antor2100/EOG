@@ -73,6 +73,7 @@ zsigma = zeros(nzJ01,1);
 dzsigma = zeros(ndnb,1);
 for i = 1:nzJ01
     zrange = rangesJ01(1,i):rangesJ01(2,i);
+    disp(zrange);
     dnbstripe = dnbdata(:,zrange);
     zsigma(i) = std(dnbstripe(:));
     dzsigma(zrange) = zsigma(i);
