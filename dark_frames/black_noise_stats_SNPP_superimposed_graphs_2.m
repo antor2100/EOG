@@ -66,11 +66,16 @@ dnbdata_2 = viirs_get_data(dnbfile_2, dnbdataset_2)' * 1e9;
 
 Y_scale = 0.5;
 
+disp(class(dnbdata_1));
+disp(dnbdata_1(1));
+
 figure()
-histogram(dnbdata_1(:),50,'Binlimits',[-1,1])
+histogram(dnbdata_1,50,'Normalization','probability', 'Binlimits',[-1,1])
 hold on
-histogram(dnbdata_2(:),50,'Binlimits',[-1,1])
+histogram(dnbdata_2,50,'Normalization','probability', 'Binlimits',[-1,1])
 legend('20220430', '20141122')
+xlabel('Radiance')
+ylabel('Normalized Frequency')
 %% Noise stats by agg zone
 zsigma = zeros(nzSNPP,1);
 ndnb = [size(dnbdata_1,2) size(dnbdata_2,2)];
@@ -108,7 +113,7 @@ size(goodrange)
 size(dnbvar_1(goodrange))
 
 p_1 = polyfit(double(goodrange),dnbvar_1(goodrange)',3)
-disp(dnbvar_1);
+%disp(dnbvar_1);
 polyvar_1 = polyval(p_1,goodrange);
 
 p_2 = polyfit(double(goodrange),dnbvar_2(goodrange)',3)
