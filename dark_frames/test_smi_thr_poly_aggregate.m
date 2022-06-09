@@ -292,7 +292,7 @@ spikeThreshFix(end-632+1:end-416) = spikeThreshFix(end-632+1:end-416) * 1.5;
 spikeThreshFix(end-856+1:end-632) = spikeThreshFix(end-856+1:end-632) * 1.25;
 
 if true
-    imgfilt = freadenvi('./boat_aggregate_for_paper/SVDNB_npp_d20140927_t1834358_e1840162_b15115_c20140928004016952044_noaa_ops.boats.smi');  % find this file (might be on eogdrive, but Misha will share it with me)
+    %imgfilt = freadenvi('./boat_aggregate_for_paper/SVDNB_npp_d20140927_t1834358_e1840162_b15115_c20140928004016952044_noaa_ops.boats.smi');  % find this file (might be on eogdrive, but Misha will share it with me)
     slval = freadenvi('./boat_aggregate_for_paper/SVDNB_npp_d20140927_t1834358_e1840162_b15115_c20140928004016952044_noaa_ops.boats.lwmask'); % these files were processed from h5 file. lwmask is land something mask as 
                                                                                                                                               % as there might be islands. So, we only use pixels that are in water.
     scrsz = get(0,'ScreenSize');

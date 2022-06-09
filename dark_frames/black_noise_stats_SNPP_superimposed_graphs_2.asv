@@ -74,7 +74,7 @@ figure()
 histogram(dnbdata_1,50,'Normalization','probability', 'Binlimits',[-1,1])
 hold on
 histogram(dnbdata_2,50,'Normalization','probability', 'Binlimits',[-1,1])
-legend(h5_1, h5_2)
+legend(h, '20141122')
 xlabel('Radiance')
 ylabel('Normalized Frequency')
 %% Noise stats by agg zone
@@ -113,12 +113,10 @@ goodrange = 1:4064;
 size(goodrange)
 size(dnbvar_1(goodrange))
 
-degree_1 = 3;
-p_1 = polyfit(double(goodrange),dnbvar_1(goodrange)',degree_1)
+p_1 = polyfit(double(goodrange),dnbvar_1(goodrange)',4)
 polyvar_1 = polyval(p_1,goodrange);
 
-degree_2 = 7;
-p_2 = polyfit(double(goodrange),dnbvar_2(goodrange)',degree_2)
+p_2 = polyfit(double(goodrange),dnbvar_2(goodrange)',8)
 polyvar_2 = polyval(p_2,goodrange);
 
 %%
@@ -139,7 +137,7 @@ plot(goodrange,polyvar_2,'LineWidth',2.0)
 ylim([0,Y_scale])
 xlabel('SNPP DNB sample')
 ylabel('STD by aggregation mode')
-legend(strcat(h5_1," Degree: ", string(degree_1)), strcat(h5_2," Degree: ", string(degree_2)))
+legend('20220430', '20141122')
 
 subplot(1,2,2)
 plot(dnbvar_1,'g')
@@ -152,4 +150,4 @@ plot(goodrange,polyvar_2,'LineWidth',2.0)
 ylim([0,Y_scale])
 xlabel('SNPP DNB sample')
 ylabel('STD by image column')
-legend(strcat(h5_1," Degree: ", string(degree_1)), strcat(h5_2," Degree: ", string(degree_2)))
+legend('20220430', '20141122')

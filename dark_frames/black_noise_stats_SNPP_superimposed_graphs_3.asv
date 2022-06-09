@@ -51,12 +51,13 @@ end
 
 %% SNPP DNB day-night band
 % dnbfile = 'SVDNB_npp_d20170128_t1255482_e1301286_b27228_c20170128190129026938_noaa_ops.h5';
-dnbfile_1 = 'SVDNB_npp_d20220430_t1334313_e1335555_b54440_c20220430150901529459_oebc_ops.h5';
+dnbfile_1 = 'SVDNB_npp_d20220430_t1334313_e1335555_b54440_c20220430150901529459_oebc_ops.h5'; % coordiate: 47.558231	177.357147
 h5_1 = '20220430';
 % DNB radiance
 dnbdataset_1 = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
 
 dnbfile_2 = 'for_misha/SVDNB_npp_d20141122_t1229070_e1234474_b15906_c20141122183448309762_noaa_ops.h5';
+%dnbfile_2 = 'for_antor/SVDNB_npp_d20141122_t0533448_e0539252_b15902_c20141122113926237379_noaa_ops.h5';
 h5_2 = '20141122';
 
 % DNB radiance
@@ -153,3 +154,39 @@ ylim([0,Y_scale])
 xlabel('SNPP DNB sample')
 ylabel('STD by image column')
 legend(strcat(h5_1," Degree: ", string(degree_1)), strcat(h5_2," Degree: ", string(degree_2)))
+
+%% Bowtie
+
+SCALE = 1;
+af3_1 = single(wiener2(dnbdata_1,[3 3],SCALE*polyvar_1));
+af3_2 = single(wiener2(dnbdata_2,[3 3],SCALE*polyvar_2));
+
+imgmed_1 = medfilt2(af3,[3 3]);
+imgfilt_1 = (af3_1 - imgmed_1);
+imgmed_2 = medfilt2(af3,[3 3]);
+imgfilt_1 = (af3_1 - imgmed_1);
+
+scrsz = get(0,'ScreenSize');
+figure('Position',[1 1 scrsz(3) scrsz(4)]);
+    
+[Line_DNB,Sample_DNB] = find(imgfilt > -1000);
+
+plot(Sample_DNB,imgfilt(imgfilt > -1000),'.')
+
+hold on
+
+plot(SCALE * polyvar_1,'g--','LineWidth',4,'DisplayName','Wiener Sigma')
+
+for i=1:nzSNPP-1
+    vline(ranges(2,i))
+end
+
+ylim([-0.1,0.2])
+xlim([0,4100])
+
+%     xlabel('Sample position in image')
+%     ylabel('SMI')
+xlabel('SNPP VIIRS DNB sample')
+ylabel('SMI threshold')
+
+set(gca,'fontsize',24)
