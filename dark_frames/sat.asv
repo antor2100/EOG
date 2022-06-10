@@ -1,4 +1,0 @@
-%%
-function [] = sat(type, name_1, name_2, degree_1, degree_2)
-    disp("function call works");    
-end

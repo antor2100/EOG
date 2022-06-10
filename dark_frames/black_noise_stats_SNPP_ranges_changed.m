@@ -61,7 +61,7 @@ dnbdata = viirs_get_data(dnbfile, dnbdataset)' * 1e9;
 Y_scale = 0.5;
 
 figure()
-%histogram(dnbdata(:),50,'Binlimits',[-1,1])
+histogram(dnbdata(:),50,'Binlimits',[-1,1])
 
 %% Noise stats by agg zone
 ndnb = size(dnbdata,2);

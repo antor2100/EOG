@@ -56,15 +56,7 @@ h5_1 = '20220430';
 % DNB radiance
 dnbdataset_1 = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
 
-dnbfile_2 = 'for_misha/SVDNB_npp_d20141122_t1229070_e1234474_b15906_c20141122183448309762_noaa_ops.h5';
-%dnbfile_2 = 'for_antor/SVDNB_npp_d20141122_t0533448_e0539252_b15902_c20141122113926237379_noaa_ops.h5';
-h5_2 = '20141122';
-
-% DNB radiance
-dnbdataset_2 = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
-
 dnbdata_1 = viirs_get_data(dnbfile_1, dnbdataset_1)' * 1e9;
-dnbdata_2 = viirs_get_data(dnbfile_2, dnbdataset_2)' * 1e9;
 
 Y_scale = 0.5;
 
@@ -73,18 +65,14 @@ disp(dnbdata_1(1));
 
 figure()
 histogram(dnbdata_1,50,'Normalization','probability', 'Binlimits',[-1,1])
-hold on
-histogram(dnbdata_2,50,'Normalization','probability', 'Binlimits',[-1,1])
-legend(h5_1, h5_2)
 xlabel('Radiance')
 ylabel('Normalized Frequency')
 %% Noise stats by agg zone
 zsigma = zeros(nzSNPP,1);
-ndnb = [size(dnbdata_1,2) size(dnbdata_2,2)];
+ndnb = [size(dnbdata_1,2)];
 
 %% fit polynomial to the DNB variance
 dnbvar_1 = zeros(ndnb(1),1);
-dnbvar_2 = zeros(ndnb(2),1);
 
 for i = 1:size(dnbdata_1,2)
      dnbvar_1(i) = std(dnbdata_1(:,i));
@@ -132,8 +120,8 @@ for i=1:nzSNPP-1
     vline(ranges(2,i))
 end
 
-ylim([-0.1,0.2])
-xlim([0,4100])
+ylim([-0.4,0.4])
+xlim([-100,4150])
 
 %     xlabel('Sample position in image')
 %     ylabel('SMI')
