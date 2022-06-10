@@ -151,6 +151,12 @@ function [p_1] = sat_2(type, name, degree)
     p_1 = polyfit(double(goodrange),dnbvar_1(goodrange)',degree_1)
     polyvar_1 = polyval(p_1,goodrange);
     
+    %dlmwrite('polynomials.csv',polyvar_1,'-append');
+    M = 1:10;
+    disp(class(polyvar_1));
+    disp(class(M));
+    dlmwrite('polynomials.csv',polyvar_1,'-append');
+    
     %% plot STD
 
     scrsz = get(0,'ScreenSize');
