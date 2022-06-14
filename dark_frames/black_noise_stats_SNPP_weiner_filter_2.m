@@ -162,13 +162,13 @@ for i=1:nzSNPP-1
     vline(ranges(2,i))
 end
 
-ylim([-0.4,0.4])
+ylim([-1.5,1.5])
 xlim([-100,4150])
 
 %     xlabel('Sample position in image')
 %     ylabel('SMI')
 xlabel('SNPP VIIRS DNB sample')
-ylabel('SMI threshold')
-legend('without weiner filter', 'with weiner filter')
+ylabel('SMI')
+legend('without Wiener filter', 'with Wiener filter')
 
 set(gca,'fontsize',24)

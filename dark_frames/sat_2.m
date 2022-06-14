@@ -103,7 +103,7 @@ function [p_1] = sat_2(type, name, degree)
         end
       
     else
-        disp('wrong satellite');
+        disp('wrong satellite name');
     end
 
     %% SNPP DNB day-night band
@@ -152,10 +152,21 @@ function [p_1] = sat_2(type, name, degree)
     polyvar_1 = polyval(p_1,goodrange);
     
     %dlmwrite('polynomials.csv',polyvar_1,'-append');
-    M = 1:10;
-    disp(class(polyvar_1));
-    disp(class(M));
-    dlmwrite('polynomials.csv',polyvar_1,'-append');
+    output = readtable('polynomials.csv', 'PreserveVariableNames',true);
+    %output = readtable('polynomials.csv');
+    %output.Properties.VariableNames={'Sat_type';'Name'; 'Degree'; 'Coeff_1'; 'Coeff_2'}
+    %output = csvread('polynomials.csv');
+    %output = textscan('polynomials.csv', '%s, %s, %f, %f');
+    disp(output)
+    row = {type, name, degree, '1', '2'}
+    %app.UITable.Data = [output;row];
+    output = [output; row];
+    %output =[output; append];
+    %output = vertcat(output,row)
+    %disp(output);
+    %disp(class(output));
+    %dlmwrite('polynomials.csv',output,'-append');
+    writetable(output, 'polynomials.csv')
     
     %% plot STD
 

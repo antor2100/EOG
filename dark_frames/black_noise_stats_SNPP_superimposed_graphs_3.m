@@ -51,14 +51,14 @@ end
 
 %% SNPP DNB day-night band
 % dnbfile = 'SVDNB_npp_d20170128_t1255482_e1301286_b27228_c20170128190129026938_noaa_ops.h5';
-dnbfile_1 = 'SVDNB_npp_d20220430_t1334313_e1335555_b54440_c20220430150901529459_oebc_ops.h5'; % coordiate: 47.558231	177.357147
-h5_1 = '20220430';
+dnbfile_1 = 'for_antor/SVDNB_npp_d20141122_t1229070_e1234474_b15906_c20141122183448309762_noaa_ops.h5'; % coordiate: 47.558231	177.357147
+h5_1 = '20141122';
 % DNB radiance
 dnbdataset_1 = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
 
-dnbfile_2 = 'for_misha/SVDNB_npp_d20141122_t1229070_e1234474_b15906_c20141122183448309762_noaa_ops.h5';
+dnbfile_2 = 'for_antor/SVDNB_npp_d20140102_t1334282_e1340086_b11310_c20140102194009281274_noaa_ops.h5';
 %dnbfile_2 = 'for_antor/SVDNB_npp_d20141122_t0533448_e0539252_b15902_c20141122113926237379_noaa_ops.h5';
-h5_2 = '20141122';
+h5_2 = '20140102-2';
 
 % DNB radiance
 dnbdataset_2 = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
@@ -118,7 +118,7 @@ degree_1 = 3;
 p_1 = polyfit(double(goodrange),dnbvar_1(goodrange)',degree_1)
 polyvar_1 = polyval(p_1,goodrange);
 
-degree_2 = 7;
+degree_2 = 3;
 p_2 = polyfit(double(goodrange),dnbvar_2(goodrange)',degree_2)
 polyvar_2 = polyval(p_2,goodrange);
 
@@ -197,7 +197,7 @@ xlim([-50,4100])
 %     xlabel('Sample position in image')
 %     ylabel('SMI')
 xlabel('SNPP VIIRS DNB sample')
-ylabel('SMI threshold')
+ylabel('SMI')
 legend(strcat(h5_1," Degree: ", string(degree_1)), strcat(h5_2," Degree: ", string(degree_2)))
 
 set(gca,'fontsize',24)
