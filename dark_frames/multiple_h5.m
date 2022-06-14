@@ -4,6 +4,8 @@ function [] = multiple_h5()
     n = input('How many files: ');
     %filenames = strings([1,n]);
     
+    Legend = strings([1,n]);
+   
     figure 
     hold on
     
@@ -157,10 +159,13 @@ function [] = multiple_h5()
         
         %% plot std
         
-        plot(dnbvar);
+        plot(dnbvar, 'DisplayName', YMD);
         %hold on
-        plot(goodrange,polyvar,'LineWidth',1.0);
+        plot(goodrange,polyvar,'LineWidth',1.0, 'DisplayName', strcat(YMD," Degree: ", string(degree)));
         %hold on
+        
+        %Legend(i)= strcat(YMD," Degree: ", string(degree));
+    
         
         %if i~=n
         %    hold on          
@@ -174,7 +179,8 @@ function [] = multiple_h5()
     ylim([0,Y_scale])
     xlabel('SNPP DNB sample')
     ylabel('STD by image column')
-    legend(strcat(YMD," Degree: ", string(degree)))
+    %legend(Legend)
+    legend('show')
     
 end
     

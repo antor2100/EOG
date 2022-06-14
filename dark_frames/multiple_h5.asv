@@ -4,6 +4,10 @@ function [] = multiple_h5()
     n = input('How many files: ');
     %filenames = strings([1,n]);
     
+    Legend = strings([1,n]);
+   
+    figure 
+    hold on
     
     for i = 1:n
         filename = input(['enter filename ' num2str(i) ': ']);
@@ -150,21 +154,35 @@ function [] = multiple_h5()
             goodrange = 464:3327;
         end
 
-        p = polyfit(double(goodrange),dnbvar(goodrange)',degree)
+        p = polyfit(double(goodrange),dnbvar(goodrange)',degree);
         polyvar = polyval(p,goodrange);
         
-        %%
-        plot(dnbvar_1,'b')
-        hold on
-        plot(goodrange,polyvar_1,'g','LineWidth',1.0)
-
-        ylim([0,Y_scale])
-        xlabel('SNPP DNB sample')
-        ylabel('STD by image column')
-        legend(strcat(h5_1," Degree: ", string(degree_1)), strcat(h5_2," Degree: ", string(degree_2)))
+        %% plot std
+        
+        plot(dnbvar);
+        %hold on
+        plot(goodrange,polyvar,'LineWidth',1.0, 'DisplayName', YMD);
+        %hold on
+        
+        Legend(i)= strcat(YMD," Degree: ", string(degree));
+    
+        
+        %if i~=n
+        %    hold on          
+        %end
 
     end
     
+    %% for loop ends
+    hold off
+    
+    ylim([0,Y_scale])
+    xlabel('SNPP DNB sample')
+    ylabel('STD by image column')
+    legend(Legend)
+    legend('show')
+    
+end
     
     
     
