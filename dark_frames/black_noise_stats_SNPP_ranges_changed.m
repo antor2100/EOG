@@ -58,6 +58,8 @@ end
 dnbdataset = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
 dnbdata = viirs_get_data(dnbfile, dnbdataset)' * 1e9;
 
+%disp(size(dnbdata))
+
 Y_scale = 0.5;
 
 figure()
@@ -101,7 +103,7 @@ goodrange = 1:4064;
 size(goodrange)
 size(dnbvar(goodrange))
 % [p,S] = polyfit(double(goodrange),dnbvar(goodrange)',2)
-p = polyfit(double(goodrange),dnbvar(goodrange)',2)
+p = polyfit(double(goodrange),dnbvar(goodrange)',2);
 
 % [polyvar,delta] = polyval(p,goodrange,S);
 % [sigmanoise,sdelta] = polyval(p,1:4064,S);

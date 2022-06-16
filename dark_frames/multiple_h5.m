@@ -157,6 +157,23 @@ function [] = multiple_h5()
         p = polyfit(double(goodrange),dnbvar(goodrange)',degree);
         polyvar = polyval(p,goodrange);
         
+        %dlmwrite('polynomials.csv',polyvar_1,'-append');
+        output = readtable('polynomials.csv', 'PreserveVariableNames',true);
+        %output = readtable('polynomials.csv');
+        %output.Properties.VariableNames={'Sat_type';'Name'; 'Degree'; 'Coeff_1'; 'Coeff_2'}
+        %output = csvread('polynomials.csv');
+        %output = textscan('polynomials.csv', '%s, %s, %f, %f');
+        disp(output)
+        row = {type, YMD, filename, degree,  '1', '2'}
+        %app.UITable.Data = [output;row];
+        output = [output; row];
+        %output =[output; append];
+        %output = vertcat(output,row)
+        %disp(output);
+        %disp(class(output));
+        %dlmwrite('polynomials.csv',output,'-append');
+        writetable(output, 'polynomials.csv')
+        
         %% plot std
         
         plot(dnbvar, 'DisplayName', YMD);
