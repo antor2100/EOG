@@ -51,8 +51,7 @@ end
 
 %% SNPP DNB day-night band
 % dnbfile = 'SVDNB_npp_d20170128_t1255482_e1301286_b27228_c20170128190129026938_noaa_ops.h5';
- dnbfile = 'SVDNB_npp_d20220430_t1334313_e1335555_b54440_c20220430150901529459_oebc_ops.h5';
-% dnbfile = 'for_misha/SVDNB_npp_d20141122_t1229070_e1234474_b15906_c20141122183448309762_noaa_ops.h5';
+ dnbfile = 'for_antor/2014/SVDNB_npp_d20140101_t1215145_e1220549_b11295_c20140101182055342789_noaa_ops.h5';
 
 % DNB radiance
 dnbdataset = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
@@ -188,7 +187,9 @@ axis equal
 hold on
 plot(col,row,'r+')
 % plot(cdnbdnb(cdnbdnb ~= fillvalue),rdnbdnb(rdnbdnb ~= fillvalue),'r+');
-title('DNB after Wiener filter');
+%xlim([0 4000])
+%ylim([-500 3000])
+title('DNB after Wiener filter 20220430');
 hold off
 
 linkaxes([ax1, ax2])
