@@ -152,13 +152,22 @@ function [p_1] = sat_2(type, name, degree)
     polyvar_1 = polyval(p_1,goodrange);
     
     %dlmwrite('polynomials.csv',polyvar_1,'-append');
-    output = readtable('polynomials.csv', 'PreserveVariableNames',true);
+    output = readtable('polynomials_2.csv', 'PreserveVariableNames',true);
     %output = readtable('polynomials.csv');
-    %output.Properties.VariableNames={'Sat_type';'Name'; 'Degree'; 'Coeff_1'; 'Coeff_2'}
+    %output.Properties.VariableUnits={'Sat_type' 'YMD' 'Name' 'Degree' 'Coeff'}
     %output = csvread('polynomials.csv');
     %output = textscan('polynomials.csv', '%s, %s, %f, %f');
     disp(output)
-    row = {type, 200, name, degree, p_1(3), p_1(4)};
+    
+    coeff = "";
+    
+    for i = 3:(degree+1)
+        coeff = strcat(coeff, " ", string(p_1(i)));
+    end
+    %coeff = "10_20";
+    
+    row = {type, 200, name, degree, coeff, 0};
+    %row = {type, 200, name, degree, coeff};
     %app.UITable.Data = [output;row];
     output = [output; row];
     %output =[output; append];
@@ -166,7 +175,7 @@ function [p_1] = sat_2(type, name, degree)
     %disp(output);
     %disp(class(output));
     %dlmwrite('polynomials.csv',output,'-append');
-    writetable(output, 'polynomials.csv')
+    writetable(output, 'polynomials_2.csv')
     
     %% plot STD
 
