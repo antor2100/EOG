@@ -67,17 +67,28 @@ histogram(dnbdata(:),50,'Binlimits',[-1,1])
 
 %% Create another array with spikes removed
 
-m = mean(mean(dnbdata));
+dnbdata_2 = dnbdata;
+
+m = mean(mean(dnbdata_2));
 
 for i = 1:size(dnbdata,1)
     for j = 1:size(dnbdata,2)
-        if dnbdata(i,j) > m + 0.2
+        if dnbdata(i,j) > m + 1.3
             dnbdata(i,j) = m;
         end
     end
 end
-        
 
+size(dnbdata_2)
+
+a = [155    34;
+    223   334;
+    135   366;
+    123   418]
+
+a(:,2) = [];
+a
+        
 %% Noise stats by agg zone
 ndnb = size(dnbdata,2);
 zsigma = zeros(nzSNPP,1);
@@ -147,15 +158,27 @@ subplot(1,2,1)
 bar(dzsmimax)
 hold on
 plot(goodrange,polyvar,'r')
+
+for i=1:32
+    vline(ranges(2,i))                           
+    vline(4064-ranges(2,i))
+end
+
 % plot(goodrange,polyvar+delta,'r.')
 ylim([0,Y_scale])
 xlabel('SNPP DNB sample')
 ylabel('Max(SMI) by aggregation mode')
 
 subplot(1,2,2)
-plot(goodrange,dsmimax(goodrange),'r')
+plot(goodrange,dsmimax(goodrange))
 hold on
 plot(goodrange,polyvar,'r')
+
+for i=1:32
+    vline(ranges(2,i))                           
+    vline(4064-ranges(2,i))
+end
+
 % plot(goodrange,polyvar+delta,'r.')
 ylim([0,Y_scale])
 xlabel('SNPP DNB sample')
