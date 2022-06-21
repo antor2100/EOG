@@ -53,7 +53,7 @@ if ~ish
    hold on; 
 end
 
-h = plot(repmat(x(:),[1 2]),ylim,varargin{:}); 
+h = plot(repmat(x(:),[1 2]),ylim,varargin{:}, 'color',[0,0,0]+0.8); 
 
 %% Clean up: 
 

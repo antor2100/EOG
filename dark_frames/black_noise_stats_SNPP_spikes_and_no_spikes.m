@@ -69,25 +69,15 @@ histogram(dnbdata(:),50,'Binlimits',[-1,1])
 
 dnbdata_2 = dnbdata;
 
-m = mean(mean(dnbdata_2));
+m = mean(mean(dnbdata));
 
 for i = 1:size(dnbdata,1)
     for j = 1:size(dnbdata,2)
-        if dnbdata(i,j) > m + 0.2
+        if dnbdata(i,j) > m + 1
             dnbdata(i,j) = m;
         end
     end
 end
-
-size(dnbdata_2)
-
-a = [155    34;
-    223   334;
-    135   366;
-    123   418]
-
-a(:,2) = [];
-a
         
 %% Noise stats by agg zone
 ndnb = size(dnbdata,2);
@@ -99,6 +89,16 @@ for i = 1:nzSNPP
     dnbstripe = dnbdata(:,zrange);
     zsigma(i) = std(dnbstripe(:));
     dzsigma(zrange) = zsigma(i);
+end
+
+zsigma = zeros(nzSNPP,1);
+dzsigma_2 = zeros(ndnb,1);
+
+for i = 1:nzSNPP
+    zrange = ranges(1,i):ranges(2,i);
+    dnbstripe = dnbdata_2(:,zrange);
+    zsigma(i) = std(dnbstripe(:));
+    dzsigma_2(zrange) = zsigma(i);
 end
 
 
@@ -113,9 +113,13 @@ for i = 1:size(dnbdata,2)
     dnbvar(i) = std(dnbdata(:,i));   
 end
 
+dnbvar_2 = zeros(ndnb,1);
+
+for i = 1:size(dnbdata_2,2)
+    dnbvar_2(i) = std(dnbdata_2(:,i));   
+end
+
 goodrange = 1:4064;
-size(goodrange)
-size(dnbvar(goodrange))
 % [p,S] = polyfit(double(goodrange),dnbvar(goodrange)',2)
 p = polyfit(double(goodrange),dnbvar(goodrange)',2);
 
@@ -126,14 +130,13 @@ p = polyfit(double(goodrange),dnbvar(goodrange)',2);
 polyvar = polyval(p,goodrange);
 sigmanoiseSNPP = polyval(p,1:4064);
 
-%%
-SCALE = 1;
-af3 = single(wiener2(dnbdata,[3 3],SCALE*sigmanoiseSNPP));
-%af3(:,1:464) = 0;
-% af3(:,3328:4064) = 0;
-
 %% Find SMI spikes
 % did not understand quite what is going on here
+
+% without spikes
+SCALE = 1;
+af3 = single(wiener2(dnbdata,[3 3],SCALE*sigmanoiseSNPP));
+
 
 imgmed = medfilt2(af3,[3 3]);
 imgfiltSNPP = (af3 - imgmed);
@@ -148,38 +151,64 @@ for i = 1:nzSNPP
 end
 
 dsmimax = zeros(ndnb,1);
+
 for i = 1:size(dnbdata,2)
     dsmimax(i) = max(imgfiltSNPP(:,i));
 end
+
+
+% with spikes
+
+af3 = single(wiener2(dnbdata_2,[3 3],SCALE*sigmanoiseSNPP));
+
+imgmed = medfilt2(af3,[3 3]);
+imgfiltSNPP = (af3 - imgmed);
+
+zsmimax = zeros(ndnb,1);
+dzsmimax = zeros(ndnb,1);
+for i = 1:nzSNPP
+    zrange = ranges(1,i):ranges(2,i);
+    smistripe = imgfiltSNPP(:,zrange);
+    zsmimax(i) = max(smistripe(:));
+    dzsmimax(zrange) = zsmimax(i);
+end
+
+dsmimax_2 = zeros(ndnb,1);
+
+for i = 1:size(dnbdata,2)
+    dsmimax_2(i) = max(imgfiltSNPP(:,i));
+end
+
+%% Plot SMI
 
 scrsz = get(0,'ScreenSize');
 figure('Position',[1 scrsz(4)/2-50 scrsz(3) scrsz(4)/2],'Name','DNB variance');
 subplot(1,2,1)
 bar(dzsmimax)
 hold on
-plot(goodrange,polyvar,'r')
+plot(goodrange,polyvar,'Color', [0,0,0])
 
 for i=1:32
     vline(ranges(2,i))                           
     vline(4064-ranges(2,i))
 end
 
-% plot(goodrange,polyvar+delta,'r.')
 ylim([0,Y_scale])
 xlabel('SNPP DNB sample')
 ylabel('Max(SMI) by aggregation mode')
 
 subplot(1,2,2)
+plot(goodrange,dsmimax_2(goodrange))
+hold on
 plot(goodrange,dsmimax(goodrange))
 hold on
-plot(goodrange,polyvar,'r')
+plot(goodrange,polyvar, 'Color', [0,0,0])
 
 for i=1:32
     vline(ranges(2,i))                           
     vline(4064-ranges(2,i))
 end
 
-% plot(goodrange,polyvar+delta,'r.')
 ylim([0,Y_scale])
 xlabel('SNPP DNB sample')
 ylabel('Max(SMI) by column')
@@ -259,16 +288,18 @@ figure('Position',[1 scrsz(4)/2-50 scrsz(3) scrsz(4)/2],'Name','DNB variance');
 subplot(1,2,1)
 bar(dzsigma)
 hold on
-plot(goodrange,polyvar,'r')
+plot(goodrange,polyvar,'Color', [0,0,0])
 % plot(goodrange,polyvar+delta,'r.')
 ylim([0,Y_scale])
 xlabel('SNPP DNB sample')
 ylabel('STD by aggregation mode')
 
 subplot(1,2,2)
+plot(dnbvar_2)
+hold on
 plot(dnbvar)
 hold on
-plot(goodrange,polyvar,'r')
+plot(goodrange,polyvar,'Color', [0,0,0])
 % plot(goodrange,polyvar+delta,'r.')
 ylim([0,Y_scale])
 xlabel('SNPP DNB sample')

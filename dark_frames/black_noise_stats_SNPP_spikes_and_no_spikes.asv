@@ -69,7 +69,7 @@ histogram(dnbdata(:),50,'Binlimits',[-1,1])
 
 dnbdata_2 = dnbdata;
 
-m = mean(mean(dnbdata_2));
+m = mean(mean(dnbdata));
 
 for i = 1:size(dnbdata,1)
     for j = 1:size(dnbdata,2)
@@ -91,6 +91,16 @@ for i = 1:nzSNPP
     dzsigma(zrange) = zsigma(i);
 end
 
+zsigma = zeros(nzSNPP,1);
+dzsigma_2 = zeros(ndnb,1);
+
+for i = 1:nzSNPP
+    zrange = ranges(1,i):ranges(2,i);
+    dnbstripe = dnbdata_2(:,zrange);
+    zsigma(i) = std(dnbstripe(:));
+    dzsigma_2(zrange) = zsigma(i);
+end
+
 
 %% fit polynomial to the DNB variance
 
@@ -103,20 +113,30 @@ for i = 1:size(dnbdata,2)
     dnbvar(i) = std(dnbdata(:,i));   
 end
 
-goodrange = 1:4064;
+dnbvar_2 = zeros(ndnb,1);
 
+for i = 1:size(dnbdata_2,2)
+    dnbvar_2(i) = std(dnbdata_2(:,i));   
+end
+
+goodrange = 1:4064;
+% [p,S] = polyfit(double(goodrange),dnbvar(goodrange)',2)
 p = polyfit(double(goodrange),dnbvar(goodrange)',2);
+
+% [polyvar,delta] = polyval(p,goodrange,S);
+% [sigmanoise,sdelta] = polyval(p,1:4064,S);
+
+% p = [2.68761561326876e-08,-0.000101778246819055,0.134918217384128 + 0.01]
 polyvar = polyval(p,goodrange);
 sigmanoiseSNPP = polyval(p,1:4064);
 
-%%
-SCALE = 1;
-af3 = single(wiener2(dnbdata,[3 3],SCALE*sigmanoiseSNPP));
-%af3(:,1:464) = 0;
-% af3(:,3328:4064) = 0;
-
 %% Find SMI spikes
 % did not understand quite what is going on here
+
+% without spikes
+SCALE = 1;
+af3 = single(wiener2(dnbdata,[3 3],SCALE*sigmanoiseSNPP));
+
 
 imgmed = medfilt2(af3,[3 3]);
 imgfiltSNPP = (af3 - imgmed);
@@ -131,9 +151,35 @@ for i = 1:nzSNPP
 end
 
 dsmimax = zeros(ndnb,1);
+
 for i = 1:size(dnbdata,2)
     dsmimax(i) = max(imgfiltSNPP(:,i));
 end
+
+
+% with spikes
+
+af3 = single(wiener2(dnbdata_2,[3 3],SCALE*sigmanoiseSNPP));
+
+imgmed = medfilt2(af3,[3 3]);
+imgfiltSNPP = (af3 - imgmed);
+
+zsmimax = zeros(ndnb,1);
+dzsmimax = zeros(ndnb,1);
+for i = 1:nzSNPP
+    zrange = ranges(1,i):ranges(2,i);
+    smistripe = imgfiltSNPP(:,zrange);
+    zsmimax(i) = max(smistripe(:));
+    dzsmimax(zrange) = zsmimax(i);
+end
+
+dsmimax_2 = zeros(ndnb,1);
+
+for i = 1:size(dnbdata,2)
+    dsmimax_2(i) = max(imgfiltSNPP(:,i));
+end
+
+%% Plot SMI
 
 scrsz = get(0,'ScreenSize');
 figure('Position',[1 scrsz(4)/2-50 scrsz(3) scrsz(4)/2],'Name','DNB variance');
@@ -147,22 +193,22 @@ for i=1:32
     vline(4064-ranges(2,i))
 end
 
-% plot(goodrange,polyvar+delta,'r.')
 ylim([0,Y_scale])
 xlabel('SNPP DNB sample')
 ylabel('Max(SMI) by aggregation mode')
 
 subplot(1,2,2)
+plot(goodrange,dsmimax_2(goodrange))
+hold on
 plot(goodrange,dsmimax(goodrange))
 hold on
-plot(goodrange,polyvar,'r')
+plot(goodrange,polyvar)
 
 for i=1:32
     vline(ranges(2,i))                           
     vline(4064-ranges(2,i))
 end
 
-% plot(goodrange,polyvar+delta,'r.')
 ylim([0,Y_scale])
 xlabel('SNPP DNB sample')
 ylabel('Max(SMI) by column')

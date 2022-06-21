@@ -151,9 +151,7 @@ function [p_1] = sat_3(type, name, degree)
     p_1 = polyfit(double(goodrange),dnbvar_1(goodrange)',degree_1)
     polyvar_1 = polyval(p_1,goodrange);
     
-    %output = readtable('polynomials_2.csv', 'PreserveVariableNames',true);
-    opts = detectImportOptions('polynomials_2.csv','NumHeaderLines',0);
-    output = readtable('polynomials_2.csv', opts);
+    output = readtable('polynomials_2.csv', 'PreserveVariableNames',true);
     disp(output)
     
     coeff = "";
@@ -166,9 +164,9 @@ function [p_1] = sat_3(type, name, degree)
     YMD = extractAfter(name(4),1);
     YMD = str2double(YMD);
     
-    id = strcat(name(7), "_", name(8));
+    id = strcat(name(7), "_", name(8))
     
-    row = {type, YMD, name(5), name(6), id, degree, coeff, 0};
+    row = {type, YMD, name(5), name(6), degree, coeff, 0};
     output = [output; row];
     writetable(output, 'polynomials_2.csv')
     
