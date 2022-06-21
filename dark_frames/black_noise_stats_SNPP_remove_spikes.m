@@ -58,14 +58,25 @@ dnbfile = 'for_antor/2022/SVDNB_npp_d20220430_t1334313_e1335555_b54440_c20220430
 dnbdataset = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
 dnbdata = viirs_get_data(dnbfile, dnbdataset)' * 1e9;
 
-
-
 %disp(size(dnbdata))
 
 Y_scale = 0.5;
 
 figure()
 histogram(dnbdata(:),50,'Binlimits',[-1,1])
+
+%% Create another array with spikes removed
+
+m = mean(mean(dnbdata));
+
+for i = 1:size(dnbdata,1)
+    for j = 1:size(dnbdata,2)
+        if dnbdata(i,j) > m + 0.2
+            dnbdata(i,j) = m;
+        end
+    end
+end
+        
 
 %% Noise stats by agg zone
 ndnb = size(dnbdata,2);
@@ -78,6 +89,7 @@ for i = 1:nzSNPP
     zsigma(i) = std(dnbstripe(:));
     dzsigma(zrange) = zsigma(i);
 end
+
 
 %% fit polynomial to the DNB variance
 
