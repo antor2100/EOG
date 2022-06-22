@@ -72,13 +72,14 @@ dnbdata_2 = dnbdata;
 m = mean(mean(dnbdata));
 
 for i = 1:size(dnbdata,1)
-    for j = 1:size(dnbdata,2)
+    for j = 120:size(dnbdata,2)-120
         if dnbdata(i,j) > m + 1
             dnbdata(i,j) = m;
+            %dnbdata(:,j) = []
         end
     end
 end
-        
+      
 %% Noise stats by agg zone
 ndnb = size(dnbdata,2);
 zsigma = zeros(nzSNPP,1);
@@ -210,8 +211,11 @@ for i=1:32
 end
 
 ylim([0,Y_scale])
+xlim([0,4064])
 xlabel('SNPP DNB sample')
 ylabel('Max(SMI) by column')
+legend('spikes not removed','spikes removed')
+legend('Location', 'northoutside')
 
 %% SMI detector
 spikethr = zeros(size(dnbdata));
@@ -300,7 +304,16 @@ hold on
 plot(dnbvar)
 hold on
 plot(goodrange,polyvar,'Color', [0,0,0])
+
+for i=1:32
+    vline(ranges(2,i))                           
+    vline(4064-ranges(2,i))
+end
+
 % plot(goodrange,polyvar+delta,'r.')
 ylim([0,Y_scale])
+xlim([0,4064])
 xlabel('SNPP DNB sample')
 ylabel('STD by image column')
+legend('spikes not removed','spikes removed')
+legend('Location', 'northoutside')

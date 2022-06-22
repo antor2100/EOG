@@ -1,6 +1,47 @@
 clear all
 close all
 
+%% SNPP DNB day-night band
+% dnbfile = 'SVDNB_npp_d20170128_t1255482_e1301286_b27228_c20170128190129026938_noaa_ops.h5';
+%dnbfile = 'for_antor/2014/SVDNB_npp_d20140101_t1215145_e1220549_b11295_c20140101182055342789_noaa_ops.h5';
+dnbfile = 'for_antor/2022/SVDNB_npp_d20220430_t1334313_e1335555_b54440_c20220430150901529459_oebc_ops.h5';
+
+% DNB radiance
+dnbdataset = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
+dnbdata = viirs_get_data(dnbfile, dnbdataset)' * 1e9;
+
+%disp(size(dnbdata))
+
+Y_scale = 0.5;
+
+figure()
+histogram(dnbdata(:),50,'Binlimits',[-1,1])
+
+%% Create another array with spikes removed
+
+dnbdata_2 = dnbdata;
+
+m = mean(mean(dnbdata));
+j = 120;
+
+for i = 1:size(dnbdata,1)
+    while j <= size(dnbdata,2)-120
+        if dnbdata(i,j) > m + 1
+            %dnbdata(i,j) = m;
+            dnbdata(:,j) = [];
+        
+        else
+            j = j + 1;
+            
+        end
+    end
+end
+
+size(dnbdata)
+
+
+%% 
+
 SMI = 0.035;
 
 aggrSNPP = [...
@@ -39,44 +80,14 @@ aggrSNPP = [...
 
 nzSNPP = size(aggrSNPP,1)*2;
 ranges = zeros(2,64);
-ranges(:,1) = [4064 - aggrSNPP(1,4) + 1, 4064];
+ranges(:,1) = [size(dnbdata,2) - aggrSNPP(1,4) + 1, size(dnbdata,2)];
 ranges(:,33) = [2032 - aggrSNPP(1,4) + 1, 2032];
 for i=2:32
     ranges(1,32 + i) = ranges(1,32 + i - 1) - aggrSNPP(i,4);
     ranges(2,32 + i) = ranges(1,32 + i - 1) - 1;
  
-    ranges(1,34 - i) = 4064 - ranges(2,32 + i - 1) + 1;
-    ranges(2,34 - i) = 4064 - ranges(1,32 + i - 1);
-end
-
-%% SNPP DNB day-night band
-% dnbfile = 'SVDNB_npp_d20170128_t1255482_e1301286_b27228_c20170128190129026938_noaa_ops.h5';
-%dnbfile = 'for_antor/2014/SVDNB_npp_d20140101_t1215145_e1220549_b11295_c20140101182055342789_noaa_ops.h5';
-dnbfile = 'for_antor/2022/SVDNB_npp_d20220430_t1334313_e1335555_b54440_c20220430150901529459_oebc_ops.h5';
-
-% DNB radiance
-dnbdataset = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
-dnbdata = viirs_get_data(dnbfile, dnbdataset)' * 1e9;
-
-%disp(size(dnbdata))
-
-Y_scale = 0.5;
-
-figure()
-histogram(dnbdata(:),50,'Binlimits',[-1,1])
-
-%% Create another array with spikes removed
-
-dnbdata_2 = dnbdata;
-
-m = mean(mean(dnbdata));
-
-for i = 1:size(dnbdata,1)
-    for j = 1:size(dnbdata,2)
-        if dnbdata(i,j) > m + 1.3
-            dnbdata(i,j) = m;
-        end
-    end
+    ranges(1,34 - i) = size(dnbdata,2) - ranges(2,32 + i - 1) + 1;
+    ranges(2,34 - i) = size(dnbdata,2) - ranges(1,32 + i - 1);
 end
         
 %% Noise stats by agg zone
@@ -119,7 +130,7 @@ for i = 1:size(dnbdata_2,2)
     dnbvar_2(i) = std(dnbdata_2(:,i));   
 end
 
-goodrange = 1:4064;
+goodrange = 1:size(dnbdata,2);
 % [p,S] = polyfit(double(goodrange),dnbvar(goodrange)',2)
 p = polyfit(double(goodrange),dnbvar(goodrange)',2);
 
@@ -128,13 +139,13 @@ p = polyfit(double(goodrange),dnbvar(goodrange)',2);
 
 % p = [2.68761561326876e-08,-0.000101778246819055,0.134918217384128 + 0.01]
 polyvar = polyval(p,goodrange);
-sigmanoiseSNPP = polyval(p,1:4064);
 
 %% Find SMI spikes
 % did not understand quite what is going on here
 
 % without spikes
 SCALE = 1;
+sigmanoiseSNPP = polyval(p,1:size(dnbdata,2));
 af3 = single(wiener2(dnbdata,[3 3],SCALE*sigmanoiseSNPP));
 
 
@@ -159,6 +170,7 @@ end
 
 % with spikes
 
+sigmanoiseSNPP = polyval(p,1:size(dnbdata_2,2));
 af3 = single(wiener2(dnbdata_2,[3 3],SCALE*sigmanoiseSNPP));
 
 imgmed = medfilt2(af3,[3 3]);
@@ -186,7 +198,7 @@ figure('Position',[1 scrsz(4)/2-50 scrsz(3) scrsz(4)/2],'Name','DNB variance');
 subplot(1,2,1)
 bar(dzsmimax)
 hold on
-plot(goodrange,polyvar,'r')
+plot(goodrange,polyvar,'Color', [0,0,0])
 
 for i=1:32
     vline(ranges(2,i))                           
@@ -202,7 +214,7 @@ plot(goodrange,dsmimax_2(goodrange))
 hold on
 plot(goodrange,dsmimax(goodrange))
 hold on
-plot(goodrange,polyvar)
+plot(goodrange,polyvar, 'Color', [0,0,0])
 
 for i=1:32
     vline(ranges(2,i))                           
@@ -288,16 +300,24 @@ figure('Position',[1 scrsz(4)/2-50 scrsz(3) scrsz(4)/2],'Name','DNB variance');
 subplot(1,2,1)
 bar(dzsigma)
 hold on
-plot(goodrange,polyvar,'r')
+plot(goodrange,polyvar,'Color', [0,0,0])
 % plot(goodrange,polyvar+delta,'r.')
 ylim([0,Y_scale])
 xlabel('SNPP DNB sample')
 ylabel('STD by aggregation mode')
 
 subplot(1,2,2)
+plot(dnbvar_2)
+hold on
 plot(dnbvar)
 hold on
-plot(goodrange,polyvar,'r')
+plot(goodrange,polyvar,'Color', [0,0,0])
+
+for i=1:32
+    vline(ranges(2,i))                           
+    vline(4064-ranges(2,i))
+end
+
 % plot(goodrange,polyvar+delta,'r.')
 ylim([0,Y_scale])
 xlabel('SNPP DNB sample')
