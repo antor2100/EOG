@@ -90,7 +90,7 @@ mean_dnbvar = mean(temp);
 dnbvar = zeros(ndnb,1);
 
 for i = 1:size(dnbdata,2)
-    if std(dnbdata(:,i)) - mean_dnbvar > 600
+    if std(dnbdata(:,i)) - mean_dnbvar > 10000
         dnbvar(i) = mean_dnbvar;
     else
         dnbvar(i) = std(dnbdata(:,i));
@@ -114,6 +114,9 @@ sigmanoiseSNPP = polyval(p,1:4064);
 %%
 SCALE = 1;
 af3 = single(wiener2(dnbdata,[3 3],SCALE*sigmanoiseSNPP));
+
+imwrite(double(af3), [dnbfile,'Wiener.tif'], 'Compression','none');
+
 %af3(:,1:464) = 0;
 % af3(:,3328:4064) = 0;
 
@@ -168,20 +171,35 @@ imagesc(spikethr)
 [row,col] = find(imgfiltSNPP > spikethr);
 
 %%
+srgb =zeros(size(af3,1), size(af3,2), 3);
+srgb(:,:,1)  = scalenoise(af3);
+srgb(:,:,2)  = scalenoise(dnbdata);
+srgb(:,:,3)  = scalenoise(dnbdata);
+srgb(10,10,:)
+size(srgb)
+red = srgb(:,:,3);
+%histogram(red(:))
+%imagesc(round(srgb));
+imshow(srgb)
+%%
+class(dnbdata)
 
-scaled = scale(dnbdata);
-image(dnbdata*5*1e2);
+sdnbdata = scale(dnbdata);
+%image(dnbdata*5*1e2);
+image(sdnbdata);
 size(dnbdata)
 colormap('gray');
 axis off
 axis image
-ax =gca;
-exportgraphics(ax,'myplot3.tif')
+ax = gca;
+
+exportgraphics(ax,'myplot3.tif','Resolution',1000)
+%saveas(gca, 'myplot3.tif');
+%export_fig ('myplot3.tif', '-native')
 
 image(af3);
 colormap('gray');
 axis off
-hold on
 plot(col,row,'r+')
 ax =gca;
 

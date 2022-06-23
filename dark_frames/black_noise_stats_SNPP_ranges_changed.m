@@ -101,13 +101,9 @@ end
 goodrange = 1:4064;
 size(goodrange)
 size(dnbvar(goodrange))
-% [p,S] = polyfit(double(goodrange),dnbvar(goodrange)',2)
+
 p = polyfit(double(goodrange),dnbvar(goodrange)',2);
 
-% [polyvar,delta] = polyval(p,goodrange,S);
-% [sigmanoise,sdelta] = polyval(p,1:4064,S);
-
-% p = [2.68761561326876e-08,-0.000101778246819055,0.134918217384128 + 0.01]
 polyvar = polyval(p,goodrange);
 sigmanoiseSNPP = polyval(p,1:4064);
 
