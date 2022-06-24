@@ -1,5 +1,5 @@
 %%
-function scImage = scale(origImage)
+function scImage = scalenoise(origImage)
 
 threshold = 1;
 

@@ -51,12 +51,12 @@ end
 
 %% SNPP DNB day-night band
 % dnbfile = 'SVDNB_npp_d20170128_t1255482_e1301286_b27228_c20170128190129026938_noaa_ops.h5';
-dnbfile_1 = 'for_antor/SVDNB_npp_d20141122_t1229070_e1234474_b15906_c20141122183448309762_noaa_ops.h5'; % coordiate: 47.558231	177.357147
+dnbfile_1 = 'for_antor/2014/SVDNB_npp_d20141122_t1229070_e1234474_b15906_c20141122183448309762_noaa_ops.h5'; % coordiate: 47.558231	177.357147
 h5_1 = '20141122';
 % DNB radiance
 dnbdataset_1 = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
 
-dnbfile_2 = 'for_antor/SVDNB_npp_d20140102_t1334282_e1340086_b11310_c20140102194009281274_noaa_ops.h5';
+dnbfile_2 = 'for_antor/2014/SVDNB_npp_d20140102_t1334282_e1340086_b11310_c20140102194009281274_noaa_ops.h5';
 %dnbfile_2 = 'for_antor/SVDNB_npp_d20141122_t0533448_e0539252_b15902_c20141122113926237379_noaa_ops.h5';
 h5_2 = '20140102-2';
 
