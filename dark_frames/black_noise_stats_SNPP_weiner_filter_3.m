@@ -51,8 +51,8 @@ end
 
 %% SNPP DNB day-night band
 % dnbfile = 'SVDNB_npp_d20170128_t1255482_e1301286_b27228_c20170128190129026938_noaa_ops.h5';
-dnbfile_1 = 'for_antor/2014/SVDNB_npp_d20141122_t1229070_e1234474_b15906_c20141122183448309762_noaa_ops.h5'; % coordiate: 47.558231	177.357147
-h5_1 = '20141122';
+dnbfile_1 = 'for_antor/2022/SVDNB_npp_d20220430_t1334313_e1335555_b54440_c20220430150901529459_oebc_ops.h5'; % coordiate: 47.558231	177.357147
+h5_1 = '20220430';
 % DNB radiance
 dnbdataset_1 = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
 
@@ -69,16 +69,17 @@ ylabel('Normalized Frequency')
 %% fit polynomial to the DNB variance
 zsigma = zeros(nzSNPP,1);
 ndnb = (size(dnbdata_1,2));
-dnbvar_1 = zeros(ndnb(1),1);
+
+dnbvar_nw = zeros(ndnb(1),1);
 
 for i = 1:size(dnbdata_1,2)
-     dnbvar_1(i) = std(dnbdata_1(:,i));
+     dnbvar_nw(i) = std(dnbdata_1(:,i));
 end
 
 goodrange = 1:4064;
 
 degree_1 = 3;
-p_1 = polyfit(double(goodrange),dnbvar_1(goodrange)',degree_1)
+p_1 = polyfit(double(goodrange),dnbvar_nw(goodrange)',degree_1)
 polyvar_1 = polyval(p_1,goodrange);
 
 %% Noise stats by agg zone
@@ -103,7 +104,7 @@ for i = 1:nzSNPP
     dzsigma_1_nw(zrange) = zsigma(i);
 end
 
-%% FInd SMI Spikes
+%% Find SMI Spikes
 
 imgmed_1 = medfilt2(af3_1,[3 3]);
 imgfilt_1 = (af3_1 - imgmed_1);
@@ -128,9 +129,24 @@ xlim([0,ndnb])
 ylim([0,2])
 xlabel('SNPP DNB sample')
 ylabel('Max(SMI) by column')
-legend('without Wiener', 'with Wiener')
+
+for i=1:nzSNPP-1
+    vline(ranges(2,i))
+end
+
+hold off
+[~, hobj, ~, ~] = legend('without Wiener', 'with Wiener','location', 'northeast', 'NumColumns',2)
+hl = findobj(hobj,'type','line');
+set(hl,'LineWidth',2);
 title(h5_1)
 
+%% STD generation
+
+dnbvar_w = zeros(ndnb(1),1);
+
+for i = 1:size(dnbdata_1,2)
+     dnbvar_w(i) = std(af3_1(:,i));
+end
 
 %% plot STD
 
@@ -149,13 +165,25 @@ ylabel('STD by aggregation mode')
 legend("no weiner filter", "weiner filter");
 
 subplot(1,2,2)
-plot(dnbvar_1,'b')
+plot(dnbvar_nw)
 hold on
-plot(goodrange,polyvar_1,'g','LineWidth',1.0)
+plot(dnbvar_w)
+xlim([0,ndnb])
+%hold on
+%plot(goodrange,polyvar_1,'g','LineWidth',1.0)
 ylim([0,Y_scale])
 xlabel('SNPP DNB sample')
 ylabel('STD by image column')
 
+for i=1:nzSNPP-1
+    vline(ranges(2,i))
+end
+
+hold off
+[~, hobj, ~, ~] = legend('without Wiener', 'with Wiener','location', 'northeast', 'NumColumns',2)
+hl = findobj(hobj,'type','line');
+set(hl,'LineWidth',2);
+title(h5_1)
 
 %% Bowtie
 

@@ -167,7 +167,13 @@ xlim([-50,ndnb+50])
 ylim([-0.5,Y_scale])
 xlabel('SNPP DNB sample')
 ylabel('SMI by column')
-legend('max','min','mean','std','polynomial')
+%legend('max','min','mean','std','polynomial')
+
+
+hold off
+[~, hobj, ~, ~] = legend('max','min','mean','std','polynomial','location', 'north', 'NumColumns',2)
+hl = findobj(hobj,'type','line');
+set(hl,'LineWidth',2);
 
 %% SMI detector
 spikethr = zeros(size(dnbdata));
