@@ -51,7 +51,7 @@ end
 
 %% SNPP DNB day-night band
 
-dnbfile = 'Data/for_antor/2022/SVDNB_npp_d20220430_t1334313_e1335555_b54440_c20220430150901529459_oebc_ops.h5';
+dnbfile = 'Data/for_antor/2022/SVDNB_npp_d20220629_t1320056_e1321297_b55291_c20220629144927620536_oebc_ops.h5';
 
 % DNB radiance
 dnbdataset = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
@@ -68,12 +68,12 @@ dnbdata_2 = dnbdata;
 
 m = mean(mean(dnbdata_2));
 flag = 1;
-j = 120;
+j = 1;
 
 goodrange = 1:4064;
 goodrange_2 = goodrange;
 
-while j <= size(dnbdata_2,2) - 120
+while j <= size(dnbdata_2,2)
     i = 1;
     while i <= size(dnbdata_2,1)
         if dnbdata_2(i,j) > m + 1
@@ -125,7 +125,7 @@ end
 
 goodrange_3 = 1:size(dnbdata_2,2);
 
-p = polyfit(double(goodrange_2),dnbvar_2(goodrange_3)',2);
+p = polyfit(double(goodrange_2),dnbvar_2(goodrange_3)',3);
 
 polyvar = polyval(p,goodrange);
 
@@ -178,14 +178,14 @@ ylabel('Max(SMI) by aggregation mode')
 subplot(1,2,2)
 plot(goodrange,dsmimax(goodrange))
 hold on
-plot(goodrange,polyvar, 'Color', [0,0,0])
+plot(goodrange,polyvar, 'Color', 'g')
 
 for i=1:32
     vline(ranges(2,i))                           
     vline(4064-ranges(2,i))
 end
 
-ylim([0,Y_scale])
+ylim([0,3.5])
 xlim([0,4064])
 xlabel('SNPP DNB sample')
 ylabel('Max(SMI) by column')
@@ -284,5 +284,6 @@ end
 % plot(goodrange,polyvar+delta,'r.')
 ylim([0,Y_scale])
 xlim([0,4064])
+ylim([0,1.2])
 xlabel('SNPP DNB sample')
 ylabel('STD by image column')

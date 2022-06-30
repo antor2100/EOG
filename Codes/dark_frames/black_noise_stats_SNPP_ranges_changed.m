@@ -50,12 +50,17 @@ for i=2:32
 end
 
 %% SNPP DNB day-night band
-% dnbfile = 'SVDNB_npp_d20170128_t1255482_e1301286_b27228_c20170128190129026938_noaa_ops.h5';
- dnbfile = 'for_antor/2022/SVDNB_npp_d20220430_t1334313_e1335555_b54440_c20220430150901529459_oebc_ops.h5';
+dnbfile = 'Data/for_antor/2022/SVDNB_npp_d20220430_t1334313_e1335555_b54440_c20220430150901529459_oebc_ops.h5';
 
 % DNB radiance
 dnbdataset = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
 dnbdata = viirs_get_data(dnbfile, dnbdataset)' * 1e9;
+
+dnbfile = 'Data/for_antor/2014/SVDNB_npp_d20140101_t1215145_e1220549_b11295_c20140101182055342789_noaa_ops.h5';
+
+% DNB radiance
+dnbdataset = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
+dnbdata_2 = viirs_get_data(dnbfile, dnbdataset)' * 1e9;
 
 %disp(size(dnbdata))
 
@@ -63,6 +68,8 @@ Y_scale = 0.5;
 
 figure()
 histogram(dnbdata(:),50,'Binlimits',[-1,1])
+xlabel('Radiance')
+ylabel('Frequency')
 
 %% Noise stats by agg zone
 ndnb = size(dnbdata,2);
@@ -78,31 +85,21 @@ end
 
 %% fit polynomial to the DNB variance
 
-% mean_dnbvar = mean(dnbvar);
-temp = zeros(ndnb,1);
-
-for i = 1:size(dnbdata,2)
-    temp(i) = std(dnbdata(:,i));
-end
-
-mean_dnbvar = mean(temp);
-
 dnbvar = zeros(ndnb,1);
 
 for i = 1:size(dnbdata,2)
-    if std(dnbdata(:,i)) - mean_dnbvar > 600
-        dnbvar(i) = mean_dnbvar;
-    else
-        dnbvar(i) = std(dnbdata(:,i));
-        
-    end
+    dnbvar(i) = std(dnbdata(:,i));    
+end
+
+dnbvar_2 = zeros(ndnb,1);
+
+for i = 1:size(dnbdata,2)
+    dnbvar_2(i) = std(dnbdata_2(:,i));    
 end
 
 goodrange = 1:4064;
-size(goodrange)
-size(dnbvar(goodrange))
 
-p = polyfit(double(goodrange),dnbvar(goodrange)',2);
+p = polyfit(double(goodrange),dnbvar_2(goodrange)',2);
 
 polyvar = polyval(p,goodrange);
 sigmanoiseSNPP = polyval(p,1:4064);
@@ -110,8 +107,6 @@ sigmanoiseSNPP = polyval(p,1:4064);
 %%
 SCALE = 1;
 af3 = single(wiener2(dnbdata,[3 3],SCALE*sigmanoiseSNPP));
-%af3(:,1:464) = 0;
-% af3(:,3328:4064) = 0;
 
 %% Find SMI spikes
 % did not understand quite what is going on here
@@ -138,7 +133,7 @@ figure('Position',[1 scrsz(4)/2-50 scrsz(3) scrsz(4)/2],'Name','DNB variance');
 subplot(1,2,1)
 bar(dzsmimax)
 hold on
-plot(goodrange,polyvar,'r')
+plot(goodrange,polyvar,'g')
 % plot(goodrange,polyvar+delta,'r.')
 ylim([0,Y_scale])
 xlabel('SNPP DNB sample')
@@ -147,7 +142,7 @@ ylabel('Max(SMI) by aggregation mode')
 subplot(1,2,2)
 plot(goodrange,dsmimax(goodrange),'r')
 hold on
-plot(goodrange,polyvar,'r')
+plot(goodrange,polyvar,'g')
 % plot(goodrange,polyvar+delta,'r.')
 ylim([0,Y_scale])
 xlabel('SNPP DNB sample')

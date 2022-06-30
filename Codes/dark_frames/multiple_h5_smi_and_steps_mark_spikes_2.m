@@ -4,7 +4,7 @@ function [] = multiple_h5()
     n = input('How many files: ');
     %filenames = strings([1,n]);
     
-    legends = [];
+    legends = {};
    
     figure 
     hold on
@@ -15,7 +15,7 @@ function [] = multiple_h5()
         degree = input('enter degree: ');
         YMD = input('enter year month day: ');
         color = input('enter plot color: ');
-        legends = [legends; YMD];
+        legends{end+1} = YMD;
         
         if type == "SNPP"
             aggr = [...
@@ -138,15 +138,24 @@ function [] = multiple_h5()
         dnbdata_2 = dnbdata;
 
         m = mean(mean(dnbdata));
-
-        for i = 1:size(dnbdata,1)
-            for j = 120:size(dnbdata,2)-120
-                if dnbdata(i,j) > m + 1
-                    dnbdata(i,j) = m;
+        
+        if YMD ~= "20220430"
+            for k = 1:size(dnbdata,1)
+                for j = 1:size(dnbdata,2)
+                    if dnbdata(k,j) > m + 1
+                        dnbdata(k,j) = m;
+                    end
                 end
             end
+        else         
+            for k = 120:size(dnbdata,1)-120
+                for j = 1:size(dnbdata,2)
+                    if dnbdata(k,j) > m + 1
+                        dnbdata(k,j) = m;
+                    end
+                end
+            end 
         end
-        
         %% Noise stats by agg zone
         zsigma = zeros(nz,1);
         ndnb = size(dnbdata,2);
@@ -166,6 +175,12 @@ function [] = multiple_h5()
              dnbvar(j) = std(dnbdata(:,j));
         end
         
+        dnbvar_2 = zeros(ndnb,1);
+
+        for j = 1:size(dnbdata_2,2)
+             dnbvar_2(j) = std(dnbdata_2(:,j));
+        end
+        
         if type == "SNPP"
             goodrange = 1:4063;
         else 
@@ -177,10 +192,15 @@ function [] = multiple_h5()
         
         sigmanoiseSNPP = polyval(p,1:4063);
         
+        p_2 = polyfit(double(goodrange),dnbvar_2(goodrange)',degree);
+        polyvar_2 = polyval(p_2,goodrange);
+        
+        sigmanoiseSNPP_2 = polyval(p_2,1:4063);
+        
         %%
         SCALE = 1;
         af3 = single(wiener2(dnbdata,[3 3],SCALE*sigmanoiseSNPP));
-        af3_2 = single(wiener2(dnbdata_2,[3 3],SCALE*sigmanoiseSNPP));
+        af3_2 = single(wiener2(dnbdata_2,[3 3],SCALE*sigmanoiseSNPP_2));
         %af3(:,1:464) = 0;
         % af3(:,3328:4064) = 0;
 
@@ -224,12 +244,12 @@ function [] = multiple_h5()
             dsmimax_2(j) = max(imgfiltSNPP(:,j));
         end
         
-        %% spikes removed
+        %% save spike location
                
         m = mean(dsmimax);
         spike_loc = [];
 
-        for j = 120:size(dnbdata,2)-120
+        for j = 1:size(dnbdata,2)
             if dsmimax_2(j) > m + 0.2
                 spike_loc = [spike_loc j];
             end
@@ -244,6 +264,8 @@ function [] = multiple_h5()
         
         for k = 1:size(spike_loc,2)
             plot(goodrange(spike_loc(k)),dsmimax_2(spike_loc(k)),color)
+            %legends = [legends; ''];
+            legends{end+1} = '';
             hold on
         end
         
@@ -288,6 +310,8 @@ function [] = multiple_h5()
 
             %plot(sigmanoiseSNPP*2,'g--','LineWidth',4,'DisplayName','Wiener Sigma')
             plot(spikeThreshFix,'LineWidth',2,'DisplayName','SMI threshold')
+            %legends = [legends; ''];
+            legends{end+1} = '';
 
             %for j=2:32
             %    vline(ranges(2,j))                                 % Misha will send me the code for vline function. it will just draw vertical lines.
@@ -333,7 +357,7 @@ function [] = multiple_h5()
     xlabel('SNPP DNB sample')
     ylabel('SMI by image column')
     ylim([0,1])
-    
+    %legends = {'Line 1','','Line 3'};
     for j=2:32
         vline(ranges(2,j))                                 % Misha will send me the code for vline function. it will just draw vertical lines.
         vline(4064-ranges(2,j))
