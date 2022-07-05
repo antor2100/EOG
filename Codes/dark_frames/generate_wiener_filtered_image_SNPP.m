@@ -51,7 +51,7 @@ end
 
 %% SNPP DNB day-night band
 % dnbfile = 'SVDNB_npp_d20170128_t1255482_e1301286_b27228_c20170128190129026938_noaa_ops.h5';
- dnbfile = 'for_antor/2014/SVDNB_npp_d20140102_t1334282_e1340086_b11310_c20140102194009281274_noaa_ops.h5';
+ dnbfile = 'Data/for_antor/2020/SVDNB_npp_d20200124_t1200380_e1202004_b42706_c20200124132957601527_nobc_ops.h5';
 
 % DNB radiance
 dnbdataset = '/All_Data/VIIRS-DNB-SDR_All/Radiance';

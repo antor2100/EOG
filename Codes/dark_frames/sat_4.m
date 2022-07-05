@@ -198,7 +198,7 @@ function [p_1] = sat_4()
         plot(dnbvar_1,'b')
         hold on
         plot(goodrange,polyvar_1,'g','LineWidth',1.0)
-        ylim([0,Y_scale])
+        ylim([0,1.2])
         xlabel('SNPP DNB sample')
         ylabel('STD by image column')
         legend(strcat(" Degree: ", string(degree_1)))

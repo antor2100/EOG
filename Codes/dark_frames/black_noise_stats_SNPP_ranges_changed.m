@@ -50,17 +50,17 @@ for i=2:32
 end
 
 %% SNPP DNB day-night band
-dnbfile = 'Data/for_antor/2022/SVDNB_npp_d20220430_t1334313_e1335555_b54440_c20220430150901529459_oebc_ops.h5';
+dnbfile = 'Data/for_antor/2020/SVDNB_npp_d20200124_t1200380_e1202004_b42706_c20200124132957601527_nobc_ops.h5';
 
 % DNB radiance
 dnbdataset = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
 dnbdata = viirs_get_data(dnbfile, dnbdataset)' * 1e9;
 
-dnbfile = 'Data/for_antor/2014/SVDNB_npp_d20140101_t1215145_e1220549_b11295_c20140101182055342789_noaa_ops.h5';
+%dnbfile = 'Data/for_antor/2020/SVDNB_npp_d20200123_t1220573_e1222214_b42692_c20200123134840777276_nobc_ops.h5';
 
 % DNB radiance
-dnbdataset = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
-dnbdata_2 = viirs_get_data(dnbfile, dnbdataset)' * 1e9;
+%dnbdataset = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
+%dnbdata_2 = viirs_get_data(dnbfile, dnbdataset)' * 1e9;
 
 %disp(size(dnbdata))
 
@@ -91,15 +91,15 @@ for i = 1:size(dnbdata,2)
     dnbvar(i) = std(dnbdata(:,i));    
 end
 
-dnbvar_2 = zeros(ndnb,1);
+%dnbvar_2 = zeros(ndnb,1);
 
-for i = 1:size(dnbdata,2)
-    dnbvar_2(i) = std(dnbdata_2(:,i));    
-end
+%for i = 1:size(dnbdata,2)
+%    dnbvar_2(i) = std(dnbdata_2(:,i));    
+%end
 
 goodrange = 1:4064;
 
-p = polyfit(double(goodrange),dnbvar_2(goodrange)',2);
+p = polyfit(double(goodrange),dnbvar(goodrange)',3);
 
 polyvar = polyval(p,goodrange);
 sigmanoiseSNPP = polyval(p,1:4064);

@@ -1,7 +1,7 @@
 clear all
 close all
 
-SMI = 0.095*1.75;
+SMI = 1.75;
 
 aggrSNPP = [...
     1 42 66 184 2.5326E-04;...
@@ -51,7 +51,7 @@ end
 
 %% SNPP DNB day-night band
 
-dnbfile = 'Data/for_antor/2022/SVDNB_npp_d20220629_t1320056_e1321297_b55291_c20220629144927620536_oebc_ops.h5';
+dnbfile = 'Data/for_antor/2020/SVDNB_npp_d20200123_t1219318_e1220560_b42692_c20200123134834865592_nobc_ops.h5';
 
 % DNB radiance
 dnbdataset = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
@@ -224,9 +224,9 @@ xlabel('SNPP DNB sample')
 ylabel('Max(SMI) by column')
 title('20220629_t1320056_e1321297_b55291_c20220629144927620536')
 
-[~, hobj, ~, ~] = legend(legends, 'NumColumns',2)
-hl = findobj(hobj,'type','line');
-set(hl,'LineWidth',2);
+%[~, hobj, ~, ~] = legend(legends, 'NumColumns',2)
+%hl = findobj(hobj,'type','line');
+%set(hl,'LineWidth',2);
     
 
 %% SMI detector

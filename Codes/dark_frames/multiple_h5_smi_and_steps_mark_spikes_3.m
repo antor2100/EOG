@@ -1,5 +1,5 @@
 %%
-function [] = multiple_h5()
+function [] = multiple_h5_smi_and_steps_mark_spikes_3()
     SMI = 0.095*1.75;
     n = input('How many files: ');
     %filenames = strings([1,n]);
@@ -260,7 +260,9 @@ function [] = multiple_h5()
         for j = 1:size(dnbdata,2)
             if dsmimax_2(j) > spikeThreshFix(j)
                 spike_loc = [spike_loc j];
-                dsmimax(j) = dsmimax(j-1);
+                if j == 1
+                    dsmimax(j) = m;
+                end
             end
         end            
         %% plot SMI
@@ -282,20 +284,16 @@ function [] = multiple_h5()
         %plot(x,y,'MarkerIndices',10);
 
         %plot(goodrange,polyvar,'LineWidth',1.0, 'DisplayName', strcat(YMD," Degree: ", string(degree)))
-        
-        ylim([-0.1,0.2])
-        xlim([0,4063])
-
-
+    
 
     end
     
     %% for loop ends
     hold off
     
-    ylim([0,Y_scale])
     xlabel('SNPP DNB sample')
     ylabel('SMI by image column')
+    xlim([0,4063])
     ylim([0,1])
     %legends = {'Line 1','','Line 3'};
     for j=2:32
