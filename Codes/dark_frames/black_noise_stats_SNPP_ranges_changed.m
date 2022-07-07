@@ -50,7 +50,7 @@ for i=2:32
 end
 
 %% SNPP DNB day-night band
-dnbfile = 'Data/for_antor/2020/SVDNB_npp_d20200124_t1200380_e1202004_b42706_c20200124132957601527_nobc_ops.h5';
+dnbfile = 'Data/for_antor/2022/SVDNB_npp_d20220629_t1320056_e1321297_b55291_c20220629144927620536_oebc_ops.h5';
 
 % DNB radiance
 dnbdataset = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
@@ -99,7 +99,7 @@ end
 
 goodrange = 1:4064;
 
-p = polyfit(double(goodrange),dnbvar(goodrange)',3);
+p = polyfit(double(goodrange),dnbvar(goodrange)',8);
 
 polyvar = polyval(p,goodrange);
 sigmanoiseSNPP = polyval(p,1:4064);
