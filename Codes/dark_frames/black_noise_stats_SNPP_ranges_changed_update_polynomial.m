@@ -51,15 +51,18 @@ end
 
 %% SNPP DNB day-night band
 
-dnbfile = 'Data/for_antor/june2022_anomaly/SVDNB_npp_d20220629_t1311331_e1312573_b55291_c20220629144840135289_oebc_ops.h5';
+dnbfile = 'Data/for_antor/2022/SVDNB_npp_d20220706_t1238402_e1240044_b55390_c20220706140741504706_oeac_ops.h5';
 
 % DNB radiance
 dnbdataset = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
 dnbdata = viirs_get_data(dnbfile, dnbdataset)' * 1e9;
 
-m = mean(mean(dnbdata));
+%dnbdata(:,1) = m*ones(size(dnbdata,1),1);
 
-dnbdata(:,1) = m*ones(size(dnbdata,1),1);
+for i = 1:size(dnbdata,1)
+    dnbdata(i,1) = dnbdata(i,2);
+end
+
 
 Y_scale = 0.5;
 
@@ -70,10 +73,11 @@ histogram(dnbdata(:),50,'Binlimits',[-1,1])
 
 dnbdata_2 = dnbdata;
 
-a = 224;
-b = 3840;
+%a = 224;
+%b = 3840;
+a = 1;
+b = 4064;
 trimmed_range = a:b;
-%dnbdata_2 = dnbdata_2(trimmed_range);
 dnbdata_2(:,1:a-1) = [];
 
 dnbdata_2(:,(b+2-a):size(dnbdata_2,2)) = [];
@@ -84,7 +88,6 @@ flag = 1;
 j = 1;
 
 goodrange = 1:4064;
-
 
 goodrange_2 = trimmed_range;
 %goodrange_2= goodrange;
@@ -240,7 +243,7 @@ xlabel('SNPP DNB sample')
 ylabel('Max(SMI) by column')
 
 a=sprintf('%.2f',SMI);
-title(strcat('File: 20220629_t1320056_e1321297_b55291_c20220629144927620536, SMI: ', string(SMI), ' Degree: ', string(degree)))
+title(strcat('File:' , 'SMI: ', string(SMI), ' Degree: ', string(degree)))
 
 %[~, hobj, ~, ~] = legend(legends, 'NumColumns',2)
 %hl = findobj(hobj,'type','line');
@@ -279,7 +282,7 @@ plot(col,row,'r+')
 % plot(cdnbdnb(cdnbdnb ~= fillvalue),rdnbdnb(rdnbdnb ~= fillvalue),'r+');
 %xlim([0 4000])
 %ylim([-500 3000])
-title('DNB after Wiener filter 20220430');
+title('DNB after Wiener filter');
 hold off
 
 linkaxes([ax1, ax2])

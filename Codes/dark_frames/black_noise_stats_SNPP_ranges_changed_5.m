@@ -51,7 +51,7 @@ end
 
 %% SNPP DNB day-night band
 
-dnbfile = 'Data/for_antor/june2022_anomaly/SVDNB_npp_d20220629_t1311331_e1312573_b55291_c20220629144840135289_oebc_ops.h5';
+dnbfile = 'Data/for_antor/2022/SVDNB_npp_d20220706_t1238402_e1240044_b55390_c20220706140741504706_oeac_ops.h5';
 
 % DNB radiance
 dnbdataset = '/All_Data/VIIRS-DNB-SDR_All/Radiance';

@@ -1,6 +1,6 @@
 %%
 function [] = sat_9()
-    SMI = 0.095*1.5;
+    SMI = 1.75;
     n = input('How many files: ');
     %filenames = strings([1,n]);
     

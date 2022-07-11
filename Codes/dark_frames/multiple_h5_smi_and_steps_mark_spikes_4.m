@@ -296,7 +296,7 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_4()
     xlabel('SNPP DNB sample')
     ylabel('SMI by image column')
     xlim([0,4063])
-    ylim([0,1])
+    ylim([0,3])
     %legends = {'Line 1','','Line 3'};
     for j=2:32
         vline(ranges(2,j))                                 % Misha will send me the code for vline function. it will just draw vertical lines.
