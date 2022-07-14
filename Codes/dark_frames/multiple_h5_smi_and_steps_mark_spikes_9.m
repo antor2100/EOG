@@ -1,6 +1,6 @@
 %%
 function [] = multiple_h5_smi_and_steps_mark_spikes_9()
-    SMI = 0.25;
+    SMI = 0.1;
     
     legends = {};
    
@@ -26,28 +26,15 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_9()
     spikeThreshFix(end-632+1:end-416) = spikeThreshFix(end-632+1:end-416) * 1.5;
     spikeThreshFix(end-856+1:end-632) = spikeThreshFix(end-856+1:end-632) * 1.25;
 
-    
-    filenames = [%"Data/for_antor/2022/SVDNB_npp_d20220708_t1028229_e1029471_b55417_c20220708114853669027_oeac_ops.h5";
-                 %"Data/for_antor/2022/SVDNB_npp_d20220708_t1200507_e1202149_b55418_c20220708132945470556_oeac_ops.h5"; 
-                 %"Data/for_antor/2022/SVDNB_npp_d20220708_t1202161_e1203403_b55418_c20220708132944470399_oeac_ops.h5";
-                 %"Data/for_antor/2022/SVDNB_npp_d20220709_t1141551_e1143192_b55432_c20220709131048643861_oeac_ops.h5";
-                 %"Data/for_antor/2022/SVDNB_npp_d20220709_t1143205_e1144446_b55432_c20220709131049643035_oeac_ops.h5";
-                 %"Data/for_antor/2022/SVDNB_npp_d20220709_t1322552_e1324194_b55433_c20220709145128719736_oeac_ops.h5"];
-                 "Data/for_antor/2022/SVDNB_npp_d20220709_t1324207_e1325448_b55433_c20220709145126882189_oeac_ops.h5";
-                 "Data/for_antor/2022/SVDNB_npp_d20220710_t1122594_e1124236_b55446_c20220710125205062517_oeac_ops.h5"; 
-                 %"Data/for_antor/2022/SVDNB_npp_d20220710_t1124248_e1125490_b55446_c20220710125201297456_oeac_ops.h5";
-                 "Data/for_antor/2022/SVDNB_npp_d20220710_t1303596_e1305238_b55447_c20220710143214973299_oeac_ops.h5";
-                 "Data/for_antor/2022/SVDNB_npp_d20220710_t1305250_e1306492_b55447_c20220710143211397323_oeac_ops.h5"];
-                 %"Data/for_antor/2022/SVDNB_npp_d20220711_t1105292_e1106533_b55460_c20220711123306681207_oeac_ops.h5"];
-                 %"Data/for_antor/2022/SVDNB_npp_d20220711_t1245040_e1246281_b55461_c20220711141306789332_oeac_ops.h5"];
-                 %"Data/for_antor/2022/SVDNB_npp_d20220711_t1246294_e1247535_b55461_c20220711141309956143_oeac_ops.h5"]; 
-                 %"Data/for_antor/2022/SVDNB_npp_d20220712_t1226083_e1227325_b55475_c20220712135434753593_oeac_ops.h5"];
-                 %"Data/for_antor/2022/SVDNB_npp_d20220712_t1227337_e1228579_b55475_c20220712135434674748_oeac_ops.h5"];
                  
-    %filenames =["Data/for_antor/2014/SVDNB_npp_d20141122_t1229070_e1234474_b15906_c20141122183448309762_noaa_ops.h5";
-     %           "Data/for_antor/2014/SVDNB_npp_d20140102_t1334282_e1340086_b11310_c20140102194009281274_noaa_ops.h5"];
+    filenames =["Data/for_antor/h5_folder/SVDNB_j01_d20211103_t1141521_e1143166_b20517_c20211103123040694218_oeac_ops.h5";
+                "Data/for_antor/h5_folder/SVDNB_j01_d20211103_t1322522_e1324167_b20518_c20211103135857235291_oeac_ops.h5";
+                "Data/for_antor/h5_folder/SVDNB_j01_d20211104_t1122570_e1124215_b20531_c20211104121138391433_oeac_ops.h5";
+                "Data/for_antor/h5_folder/SVDNB_j01_d20211104_t1305211_e1306456_b20532_c20211104135250660569_oeac_ops.h5";
+                "Data/for_antor/h5_folder/SVDNB_j01_d20211105_t1105259_e1106504_b20545_c20211105114221215058_oebc_ops.h5";
+                "Data/for_antor/h5_folder/SVDNB_j01_d20211105_t1245003_e1246248_b20546_c20211105133316027056_oebc_ops.h5"];
             
-    type = 'SNPP';
+    type = 'J01';
     degree = 3;
              
     colors = ['r' 'g' 'b' 'm' 'y' 'k'];
