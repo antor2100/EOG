@@ -27,13 +27,22 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_concat()
     spikeThreshFix(end-632+1:end-416) = spikeThreshFix(end-632+1:end-416) * 1.5;
     spikeThreshFix(end-856+1:end-632) = spikeThreshFix(end-856+1:end-632) * 1.25;
     
-    filenames = ["Data/for_antor/2022/may_30/SVDNB_npp_d20220529_t1250458_e1252100_b54851_c20220529142312957078_oeac_ops.h5"; 
-                 "Data/for_antor/2022/may_30/SVDNB_npp_d20220529_t1252112_e1253354_b54851_c20220529142318453346_oeac_ops.h5";
-                 "Data/for_antor/2022/may_30/SVDNB_npp_d20220530_t1231501_e1233143_b54865_c20220530140201018039_oeac_ops.h5";
-                 "Data/for_antor/2022/may_30/SVDNB_npp_d20220530_t1233155_e1234397_b54865_c20220530140158500294_oeac_ops.h5";
-                 "Data/for_antor/2022/may_30/SVDNB_npp_d20220531_t1212545_e1214187_b54879_c20220531134403291810_oeac_ops.h5";
-                 "Data/for_antor/2022/may_30/SVDNB_npp_d20220531_t1214199_e1215441_b54879_c20220531134411840837_oeac_ops.h5"];
-    %colors = ['r' 'g' 'b' 'm' 'y' 'k'];
+    filenames = [%"Data/for_antor/2022/SVDNB_npp_d20220708_t1028229_e1029471_b55417_c20220708114853669027_oeac_ops.h5";
+                 %"Data/for_antor/2022/SVDNB_npp_d20220708_t1200507_e1202149_b55418_c20220708132945470556_oeac_ops.h5"; 
+                 %"Data/for_antor/2022/SVDNB_npp_d20220708_t1202161_e1203403_b55418_c20220708132944470399_oeac_ops.h5";
+                 %"Data/for_antor/2022/SVDNB_npp_d20220709_t1141551_e1143192_b55432_c20220709131048643861_oeac_ops.h5";
+                 %"Data/for_antor/2022/SVDNB_npp_d20220709_t1143205_e1144446_b55432_c20220709131049643035_oeac_ops.h5";
+                 %"Data/for_antor/2022/SVDNB_npp_d20220709_t1322552_e1324194_b55433_c20220709145128719736_oeac_ops.h5"];
+                 "Data/for_antor/2022/SVDNB_npp_d20220709_t1324207_e1325448_b55433_c20220709145126882189_oeac_ops.h5";
+                 "Data/for_antor/2022/SVDNB_npp_d20220710_t1122594_e1124236_b55446_c20220710125205062517_oeac_ops.h5"; 
+                 %"Data/for_antor/2022/SVDNB_npp_d20220710_t1124248_e1125490_b55446_c20220710125201297456_oeac_ops.h5";
+                 "Data/for_antor/2022/SVDNB_npp_d20220710_t1303596_e1305238_b55447_c20220710143214973299_oeac_ops.h5";
+                 "Data/for_antor/2022/SVDNB_npp_d20220710_t1305250_e1306492_b55447_c20220710143211397323_oeac_ops.h5"];
+                 %"Data/for_antor/2022/SVDNB_npp_d20220711_t1105292_e1106533_b55460_c20220711123306681207_oeac_ops.h5"];
+                 %"Data/for_antor/2022/SVDNB_npp_d20220711_t1245040_e1246281_b55461_c20220711141306789332_oeac_ops.h5"];
+                 %"Data/for_antor/2022/SVDNB_npp_d20220711_t1246294_e1247535_b55461_c20220711141309956143_oeac_ops.h5"]; 
+                 %"Data/for_antor/2022/SVDNB_npp_d20220712_t1226083_e1227325_b55475_c20220712135434753593_oeac_ops.h5"];
+                 %"Data/for_antor/2022/SVDNB_npp_d20220712_t1227337_e1228579_b55475_c20220712135434674748_oeac_ops.h5"];
     n = size(filenames, 1);
     
     %% SNPP DNB day-night band
@@ -177,10 +186,10 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_concat()
 
     dnbdata_2 = dnbdata;
 
-    %a = 224;
-    %b = 3840;
-    a = 1;
-    b = 4064;
+    a = 320;
+    b = 3905;
+    %a = 1;
+    %b = 4064;
     trimmed_range = a:b;
     dnbdata_2(:,1:a-1) = [];
 
@@ -258,13 +267,13 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_concat()
 
     % without spikes
     imgmed = medfilt2(af3,[3 3]);
-    imgfiltSNPP = (af3 - imgmed);
+    imgfilt = (af3 - imgmed);
 
     zsmimax = zeros(ndnb,1);
     dzsmimax = zeros(ndnb,1);
     for j = 1:nz
         zrange = ranges(1,j):ranges(2,j);
-        smistripe = imgfiltSNPP(:,zrange);
+        smistripe = imgfilt(:,zrange);
         zsmimax(j) = max(smistripe(:));
         dzsmimax(zrange) = zsmimax(j);
     end
@@ -272,7 +281,7 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_concat()
     dsmimax = zeros(ndnb,1);
 
     for j = 1:size(dnbdata,2)
-        dsmimax(j) = max(imgfiltSNPP(:,j));
+        dsmimax(j) = max(imgfilt(:,j));
     end
 
     % to turn the spikes into dots
@@ -300,7 +309,7 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_concat()
     legends{end+1} = 'concatenated';
     hold on
 
-    plot(goodrange,polyvar(goodrange),color)
+    plot(goodrange,polyvar(goodrange),'g')
     hold on
     legends{end+1} = '';
 
@@ -308,38 +317,24 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_concat()
 
     for k = 1:size(spike_loc,2)
         plot(goodrange(spike_loc(k)),dsmimax_2(spike_loc(k)),color,'MarkerSize', 10)
-        %legends = [legends; ''];
         legends{end+1} = '';
-        %hold on
     end
 
-    %plot(goodrange(10),dsmimax(10),'*')
-
-    %plot(x,y,'MarkerIndices',10);
-
-    %plot(goodrange,polyvar,'LineWidth',1.0, 'DisplayName', strcat(YMD," Degree: ", string(degree)))
-    
-
-    
-    
-    %% for loop ends
-    
     plot(spikeThreshFix,'LineWidth',2,'DisplayName','SMI threshold', 'Color', [0.6350 0.0780 0.1840])
     legends{end+1} = '';
     
     hold off
     
-    xlabel('SNPP DNB sample')
+    xlabel(strcat(type, ' DNB sample'))
     ylabel('SMI by image column')
     xlim([0,4064])
     ylim([0,1])
     
-    SMI = sprintf('%.2f',SMI);
+    SMI = sprintf('%.3f',SMI);
     
     title(strcat('SMI Threshold: ',SMI))
     
-    %legends = {'Line 1','','Line 3'};
-    for j=2:32
+    for j=1:32
         vline(ranges(2,j))                                 % Misha will send me the code for vline function. it will just draw vertical lines.
         vline(4064-ranges(2,j))
     end
@@ -347,6 +342,41 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_concat()
     [~, hobj, ~, ~] = legend(legends, 'NumColumns',2)
     hl = findobj(hobj,'type','line');
     set(hl,'LineWidth',2);
+    
+    %% Bowtie
+    
+    figure();
+    legends = {};
+
+    [Line_DNB,Sample_DNB] = find(imgfilt > -1000);
+
+    color = strcat('b','.');
+
+    plot(Sample_DNB,imgfilt(imgfilt > -1000), color)
+    legends{end+1} = 'concatenated';
+
+    hold on
+
+    color = strcat('g','--');
+
+    plot(polyvar,color,'LineWidth',2,'DisplayName','Wiener Sigma')
+    legends{end+1} = '';
+
+    for j=1:32
+        vline(ranges(2,j))                                 % Misha will send me the code for vline function. it will just draw vertical lines.
+        vline(4064-ranges(2,j))
+    end
+    
+    ylim([-0.8,0.8])
+    xlim([-36,4100])
+
+    xlabel(strcat(type, ' DNB sample'))
+    ylabel('SMI')
+    %legend(strcat(h5_1," Degree: ", string(degree_1)), strcat(h5_2," Degree: ", string(degree_2)))
+    
+    [~, hobj, ~, ~] = legend(legends, 'NumColumns',2, 'Location','best')
+    hl = findobj(hobj,'type','patch');
+    set(hl,'LineWidth',1);
     
     
 end

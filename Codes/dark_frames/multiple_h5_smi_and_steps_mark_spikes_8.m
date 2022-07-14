@@ -1,6 +1,6 @@
 %%
 function [] = multiple_h5_smi_and_steps_mark_spikes_8()
-    SMI = 0.25;
+    SMI = 0.2;
     
     legends = {};
    
@@ -27,14 +27,26 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_8()
     spikeThreshFix(end-856+1:end-632) = spikeThreshFix(end-856+1:end-632) * 1.25;
 
     
-    filenames = ["Data/for_antor/2022/may_30/SVDNB_npp_d20220529_t1250458_e1252100_b54851_c20220529142312957078_oeac_ops.h5"; 
-                 "Data/for_antor/2022/may_30/SVDNB_npp_d20220529_t1252112_e1253354_b54851_c20220529142318453346_oeac_ops.h5";
-                 "Data/for_antor/2022/may_30/SVDNB_npp_d20220530_t1231501_e1233143_b54865_c20220530140201018039_oeac_ops.h5";
-                 "Data/for_antor/2022/may_30/SVDNB_npp_d20220530_t1233155_e1234397_b54865_c20220530140158500294_oeac_ops.h5";
-                 "Data/for_antor/2022/may_30/SVDNB_npp_d20220531_t1212545_e1214187_b54879_c20220531134403291810_oeac_ops.h5";
-                 "Data/for_antor/2022/may_30/SVDNB_npp_d20220531_t1214199_e1215441_b54879_c20220531134411840837_oeac_ops.h5"];
+    filenames = ["Data/for_antor/2022/SVDNB_npp_d20220708_t1028229_e1029471_b55417_c20220708114853669027_oeac_ops.h5";
+                 "Data/for_antor/2022/SVDNB_npp_d20220708_t1200507_e1202149_b55418_c20220708132945470556_oeac_ops.h5"; 
+                 "Data/for_antor/2022/SVDNB_npp_d20220708_t1202161_e1203403_b55418_c20220708132944470399_oeac_ops.h5";
+                 "Data/for_antor/2022/SVDNB_npp_d20220709_t1141551_e1143192_b55432_c20220709131048643861_oeac_ops.h5";
+                 "Data/for_antor/2022/SVDNB_npp_d20220709_t1143205_e1144446_b55432_c20220709131049643035_oeac_ops.h5";
+                 "Data/for_antor/2022/SVDNB_npp_d20220709_t1322552_e1324194_b55433_c20220709145128719736_oeac_ops.h5"];
+                 %"Data/for_antor/2022/SVDNB_npp_d20220709_t1324207_e1325448_b55433_c20220709145126882189_oeac_ops.h5";
+                 %"Data/for_antor/2022/SVDNB_npp_d20220710_t1122594_e1124236_b55446_c20220710125205062517_oeac_ops.h5"; 
+                 %"Data/for_antor/2022/SVDNB_npp_d20220710_t1124248_e1125490_b55446_c20220710125201297456_oeac_ops.h5";
+                 %"Data/for_antor/2022/SVDNB_npp_d20220710_t1303596_e1305238_b55447_c20220710143214973299_oeac_ops.h5";
+                 %"Data/for_antor/2022/SVDNB_npp_d20220710_t1305250_e1306492_b55447_c20220710143211397323_oeac_ops.h5";
+                 %"Data/for_antor/2022/SVDNB_npp_d20220711_t1105292_e1106533_b55460_c20220711123306681207_oeac_ops.h5";
+                 %"Data/for_antor/2022/SVDNB_npp_d20220711_t1245040_e1246281_b55461_c20220711141306789332_oeac_ops.h5";
+                 %"Data/for_antor/2022/SVDNB_npp_d20220711_t1246294_e1247535_b55461_c20220711141309956143_oeac_ops.h5"; 
+                 %"Data/for_antor/2022/SVDNB_npp_d20220712_t1226083_e1227325_b55475_c20220712135434753593_oeac_ops.h5";
+                 %"Data/for_antor/2022/SVDNB_npp_d20220712_t1227337_e1228579_b55475_c20220712135434674748_oeac_ops.h5";];
              
-    colors = ['r' 'g' 'b' 'm' 'y' 'k'];
+    %colors = ['r' 'g' 'b' 'm' 'y' 'k'];
+    colors = ['r' 'g' 'b' 'm' 'y' 'k' 'r' 'g' 'b' 'm' 'y' 'k' 'r' 'g' 'b' 'm'];
+    
     n = size(filenames, 1)
     
     for i = 1:n
@@ -165,10 +177,10 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_8()
         
         dnbdata_2 = dnbdata;
 
-        %a = 224;
-        %b = 3840;
-        a = 1;
-        b = 4064;
+        a = 224;
+        b = 3840;
+        %a = 1;
+        %b = 4064;
         trimmed_range = a:b;
         dnbdata_2(:,1:a-1) = [];
 
@@ -263,7 +275,8 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_8()
 
         row = {filename(size(filename,1)), YMD, name(4), name(5), id, degree, coeff, 0};
         output = [output; row];
-        writetable(output, 'Data/for_antor/2022/jan_2/summary.csv'); 
+        disp(row)
+        %writetable(output, 'Data/for_antor/2022/jan_2/summary.csv'); 
               
         %%
         SCALE = 1;
@@ -346,12 +359,12 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_8()
     
     hold off
     
-    xlabel('SNPP DNB sample')
+    xlabel(strcat(type, ' DNB sample'))
     ylabel('SMI by image column')
     xlim([0,4064])
     ylim([0,1])
     
-    SMI = sprintf('%.2f',SMI);
+    SMI = sprintf('%.3f',SMI);
     
     title(strcat('SMI Threshold: ',SMI))
     
