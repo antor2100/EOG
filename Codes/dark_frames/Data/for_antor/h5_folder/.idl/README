@@ -1,0 +1,104 @@
+---------------------------------------------------------------------
+Directory: /u/st/da/antor/.idl
+Purpose:   IDL Application User Directory
+User:  antor@eogdev.mines.edu
+Date:  Wed May 18 15:48:47 2022
+README Creator:  IDL 8.7.2 (linux x86_64 m64 f64)
+README Version:  2
+---------------------------------------------------------------------
+
+This is the *IDL application user directory*, usually
+referred to as the .idl (dot-IDL) directory. It was created
+by IDL on the date shown above. It is used to hold files
+created by IDL (or by applications written in IDL) that need
+to persist between IDL sessions. (For example, the IDL
+iTools application stores its configuration information
+here.) Each IDL user has a unique IDL application user
+directory -- they are not shared between users.
+
+Why ".idl"? Why here?
+---------------------
+The name ".idl" follows the Unix convention that applications
+store user-specific configuration information in a
+file or directory whose name begins with the dot character,
+located in the user's home directory. For example, the
+Bourne shell (/bin/sh) reads .profile, while the C-shell
+(/bin/csh) reads .login and .cshrc. There can be a large
+number of such files. However, the dot at the beginning
+of the file name causes the Unix "ls" directory command
+not to show the file (unless the "-a" option is specified),
+in effect hiding the file from view. This reduces the apparent
+clutter in the user's home directory.
+
+In the interest of cross-platform consistency, we have followed
+the Unix convention and created the IDL application user
+directory as a dot-file in the user's home directory on all
+platforms.
+
+Can I store things here?
+------------------------
+We encourage you to use the IDL application user directory
+to store user information for your own IDL applications.
+Having all IDL applications using the same standard mechanism
+makes things easier for IDL users. Use the IDL APP_USER_DIR
+function to create application-specific subdirectories of the
+.idl directory. The APP_USER_DIR function determines where
+the .idl directory should be located on any system, and also
+knows where to place your specific content within it. Using
+this function is easier than coding a cross-platform
+solution yourself, and ensures that your usage won't
+conflict with anyone else. Read the documentation for
+APP_USER_DIR in the IDL Reference Guide for complete
+details
+
+Organization of the .idl directory
+----------------------------------
+Underneath the .idl directory you will find subdirectories
+with the names of the authors of the applications that are
+currently storing information here. See the APP_USER_DIR
+documentation for details. Each author directory contains a
+README file supplied by the application author; this file
+should explain who the author is.
+
+Underneath each author directory are that author's
+application directories, in which individual applications
+store their data.  Application directories may be tied to a
+specific IDL version and/or system (OS/Hardware), or they
+may be version and system independent. Any such versioning
+is managed by the APP_USER_DIR function based on the
+options specified when calling it. Each application
+directory contains a README file supplied by the author;
+this file should explain what the application is, and should
+contain any special information you might need in order to
+understand the contents of the directory. 
+
+Other than the README file, the contents of an application
+directory are entirely up to the application author. The
+APP_USER_DIR function does not manage the content, only its
+location. The README files should provide information about
+how the application organizes its data.
+
+Deleting the .idl directory
+---------------------------
+You are allowed to delete the .idl directory or any of its
+subdirectories. The deleted information will be automatically
+recreated the next time you run the associated application
+or applications. You should, however, take the following
+into consideration before deleting information in the .idl
+directory:
+
+    - You should avoid removing the .idl directory or its
+      contents while an active IDL process is using it, as
+      this can cause problems for your IDL session.
+      It is easiest and safest to ensure that no IDL
+      process is running before removing anything.
+
+    - If you delete files in the .idl directory that are
+      used by an application, the application will
+      recreate the files on demand, but all options will
+      revert to their default values, and any personalized
+      changes you have made will be lost.
+
+    - A given application may have special rules concerning
+      deletion of its files. Any such rules should be explained
+      by the README file for that application.

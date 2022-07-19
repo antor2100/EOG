@@ -1,0 +1,21 @@
+---------------------------------------------------------------------
+Directory: /u/st/da/antor/.idl/envi/rbuf
+Purpose:   IDL Saved Command History
+User:  antor@eogdev.mines.edu
+Date:  Wed May 18 16:20:19 2022
+README Creator:  IDL 8.7.2 (linux x86_64 m64 f64)
+README Version:  1
+Sharing Criteria: <no restrictions>
+---------------------------------------------------------------------
+
+   This directory is used by IDL to hold the contents of the user
+command recall buffer between IDL sessions.
+
+If the IDL_RBUF_PERSIST preference is True, IDL writes the
+contents of its command recall buffer to a command history
+file here when it exists. Subsequent IDL invocations read the
+history file to initialize their buffer.
+
+You may remove any files found here. If you remove a history
+file, the next IDL invocation will not find it, and will instead
+start with an empty command recall buffer

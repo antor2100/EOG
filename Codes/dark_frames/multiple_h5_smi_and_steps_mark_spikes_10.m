@@ -1,6 +1,6 @@
 %%
-function [] = multiple_h5_smi_and_steps_mark_spikes_9()
-    SMI = 0.1;
+function [] = multiple_h5_smi_and_steps_mark_spikes_10()
+    SMI = 0.25;
     
     legends = {};
    
@@ -25,15 +25,17 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_9()
     spikeThreshFix(end-416+1:end-96) = spikeThreshFix(end-416+1:end-96) * 2;
     spikeThreshFix(end-632+1:end-416) = spikeThreshFix(end-632+1:end-416) * 1.5;
     spikeThreshFix(end-856+1:end-632) = spikeThreshFix(end-856+1:end-632) * 1.25;
-                 
-    filenames =["Data/for_antor/h5_folder/SVDNB_npp_d20220716_t1110275_e1111517_b55531_c20220716123932136547_oeac_ops.h5";
-               "Data/for_antor/h5_folder/SVDNB_npp_d20220716_t1111529_e1113171_b55531_c20220716161245682397_oeac_ops.h5";
-                "Data/for_antor/h5_folder/SVDNB_npp_d20220716_t1251277_e1252519_b55532_c20220716181357981383_oeac_ops.h5";
-                "Data/for_antor/h5_folder/SVDNB_npp_d20220716_t1252531_e1254173_b55532_c20220716181357981383_oeac_ops.h5";
-                "Data/for_antor/h5_folder/SVDNB_npp_d20220717_t1232321_e1233563_b55546_c20220717140055978578_oeac_ops.h5";
-                "Data/for_antor/h5_folder/SVDNB_npp_d20220717_t1233575_e1235217_b55546_c20220717174127667930_oeac_ops.h5";
-                "Data/for_antor/h5_folder/SVDNB_npp_d20220718_t1213364_e1215006_b55560_c20220718134048844372_oeac_ops.h5";
-                "Data/for_antor/h5_folder/SVDNB_npp_d20220718_t1215018_e1216260_b55560_c20220718134047337905_oeac_ops.h5"];
+    
+    PWD = ('/Users/antor/Documents/EOG/Codes/dark_frames/Data/for_antor/h5_folder/');
+    fid = fopen('/Users/antor/Documents/EOG/Codes/dark_frames/Data/for_antor/h5_names.txt');
+    
+    tline = fgetl(fid);
+    filenames = {};
+    while ischar(tline)
+        filenames{end+1,1} = strcat(PWD,tline);
+        tline = fgetl(fid);
+    end
+    fclose(fid);
             
     type = 'SNPP';
     degree = 3;
@@ -48,7 +50,7 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_9()
     polyvar_2 = zeros([1 4064 n]);
        
     for i = 1:n
-        filename = filenames(i);
+        filename = filenames{i};
         color = colors(i);
         %legends{end+1} = '';
         
@@ -172,10 +174,10 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_9()
         
         dnbdata_2 = dnbdata;
 
-        %a = 320;
-        %b = 3905;
-        a = 1;
-        b = 4064;
+        a = 320;
+        b = 3905;
+        %a = 1;
+        %b = 4064;
         trimmed_range = a:b;
         dnbdata_2(:,1:a-1) = [];
 

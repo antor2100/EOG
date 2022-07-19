@@ -1,0 +1,40 @@
+---------------------------------------------------------------------
+Directory: /u/st/da/antor/.idl/envi/pref-10-idl_8_7-unix
+Purpose:   IDL User Preference Data
+User:  antor@eogdev.mines.edu
+Date:  Wed May 18 15:48:47 2022
+README Creator:  IDL 8.7.2 (linux x86_64 m64 f64)
+README Version:  1
+Sharing Criteria:
+    !VERSION.RELEASE:          8.7.2
+    !VERSION.OS_FAMILY:        unix
+---------------------------------------------------------------------
+
+   This directory is used by IDL to hold the files that
+maintain user preference state information between IDL sessions.
+It is easiest to allow IDL to manage the preference file rather
+than manipulating it outside of IDL. However, you are allowed
+to edit the preference file or delete any file found here,
+as described below. If you do so, you must first ensure that
+there are no running instances of IDL that can access this
+directory. Altering the contents of this directory outside of
+IDL's control while an IDL session is running can confuse IDL.
+
+    [] You may edit the preference file (idl.pref) using any
+       standard text editor. The preferences and their allowed
+       values are described in the IDL documentation which is
+       included with IDL. Please note that IDL has a user level
+       API for managing user preferences. Although you are
+       allowed to edit the file directly, it is not required.
+
+    [] If you do edit the preference file, don't remove or alter
+       the comment header at the beginning. PREF_MIGRATE depends
+       on it to extract information about the IDL that wrote the
+       file. If it doesn't find that information, it will ignore
+       the file.
+
+    [] You may remove any files found here. If you remove a file,
+       IDL will recreate it if it is needed. Any customizations
+       contained in the deleted file will be lost, and the IDL
+       generated replacement will revert to default values.
+
