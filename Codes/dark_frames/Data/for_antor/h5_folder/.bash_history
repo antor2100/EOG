@@ -1,57 +1,3 @@
-ls
-cd ..
-cd j01_d20220102_t1117300_e1118527_b21368
-pwd
-ls
-cd ..
-cd j01_d20220102_t1257043_e1258288_b21369
-pwd
-ls
-cd ..
-cd j01_d20220103_t1238092_e1239319_b21383
-pwd
-ls
-cd ..
-cd j01_d20220103_t1239332_e1240577_b21383
-pwd
-ls
-cd ..
-cd j01_d20220102_t1116042_e1117287_b21368
-pwd
-ls
-cd ..
-cd j01_d20220103_t1417436_e1419063_b21384
-pwd
-ls
-cd ..
-cd j01_d20220130_t1233389_e1235035_b21766
-pwd
-ls
-cd ..
-cd j01_d20220130_t1411475_e1413121_b21767
-pwd
-ls
-cd ..
-cd j01_d20220131_t1214438_e1216066_b21780
-pwd
-ls
-cd ..
-cd j01_d20220131_t1352524_e1354170_b21781
-pwd
-ls
-cd ..
-cd j01_d20220201_t1154230_e1155475_b21794
-pwd
-cd j01_d20220201_t1154230_e1155475_b21794
-pwd
-ls
-cd ..
-cd j01_202202
-cd aggregate_dirs/
-cd j01_d20220201_t1154230_e1155475_b21794
-pwd
-ls
-cd ..
 cd j01_d20220201_t1155487_e1157115_b21794
 pwd
 ls
@@ -998,3 +944,57 @@ cd ..
 ls
 cd j01_d20220718_t0059198_e0100443_b24157
 ls
+cd antor_codes/
+ls
+vim j01_ven_granules.txt
+vim run_command.txt 
+cd /eog/data/viirs/j01/j01_202002/aggregate_dirs/
+ls
+ls -ltr
+cd j01_d20200205_t0549523_e0551168_b11476
+ls
+ls -ltr
+ls
+clear
+ls
+ls -ltr *vlag*
+ls -ltr *vflag*
+cd ..
+ls
+cd j01_d20200229_t2347460_e2349105_b11827
+ls
+cd /eog/viirs/
+cd /eog
+ls
+cd data
+ls
+cd viirs
+ls
+cd ..
+ls
+cd projects/
+ls
+cd j01_vflags_ven/
+ls
+cd j01_d20200205_t0549523_e0551168_b11476
+ls
+cd ..
+for d in j01_d*; do ls $d/*.vflag.gz>/dev/null;done
+ls
+ls -d j01*
+cd j01_d20200205_t0549523_e0551168_b11476
+ls
+cd ..
+rsync -Wavr j01_d20200205* antor@eogdev.mines.edu:/eog/data/viirs/j01/j01_202002/aggregate_dirs/
+cd antor_codes/
+ls
+less j01_ven_granules_original.txt 
+exit
+cd antor_codes/
+ls
+vim j01_ven_granules_original.txt 
+rm j01_ven_granules_original.txt 
+touch j01_ven_granules_original.txt
+vim j01_ven_granules_original.txt 
+cd antor_codes/
+vim batch.txt 

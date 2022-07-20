@@ -2,6 +2,8 @@
 
 filenames=$(cat batch.txt)
 
+rm -r h5_folder/*
+
 for file in ${filenames[@]}; do
   sat_type=${file:0:3}
   month=${file:5:6}
@@ -15,5 +17,7 @@ for file in ${filenames[@]}; do
 done
 
 ls h5_folder > h5_names.txt
+
+#rm -r h5_folder/antor_codes
 
 # %04LaBamba%

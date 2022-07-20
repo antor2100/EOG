@@ -1,6 +1,6 @@
 %%
 function [] = multiple_h5_smi_and_steps_mark_spikes_concat()
-    SMI = 0.1;
+    SMI = 0.2;
     %filenames = strings([1,n]);
     
     legends = {};
@@ -27,34 +27,17 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_concat()
     spikeThreshFix(end-632+1:end-416) = spikeThreshFix(end-632+1:end-416) * 1.5;
     spikeThreshFix(end-856+1:end-632) = spikeThreshFix(end-856+1:end-632) * 1.25;
     
-    filenames = ["Data/for_antor/h5_folder/SVDNB_j01_d20211203_t1359454_e1401100_b20944_c20211203144917344037_oeac_ops.h5";
-                 "Data/for_antor/h5_folder/SVDNB_j01_d20211203_t1221351_e1222596_b20943_c20211203125632084533_oeac_ops.h5";
-                 "Data/for_antor/h5_folder/SVDNB_j01_d20211204_t1202400_e1204045_b20957_c20211204124903332435_oeac_ops.h5";
-                 "Data/for_antor/h5_folder/SVDNB_j01_d20211204_t1342143_e1343388_b20958_c20211204142935834354_oeac_ops.h5";
-                 "Data/for_antor/h5_folder/SVDNB_j01_d20211205_t1142191_e1143436_b20971_c20211205122954160028_oeac_ops.h5";
-                 "Data/for_antor/h5_folder/SVDNB_j01_d20211205_t1143449_e1145094_b20971_c20211205123008669172_oeac_ops.h5";
-                 "Data/for_antor/h5_folder/SVDNB_j01_d20211103_t1141521_e1143166_b20517_c20211103123040694218_oeac_ops.h5";
-                 "Data/for_antor/h5_folder/SVDNB_j01_d20211103_t1322522_e1324167_b20518_c20211103135857235291_oeac_ops.h5";
-                 "Data/for_antor/h5_folder/SVDNB_j01_d20211104_t1122570_e1124215_b20531_c20211104121138391433_oeac_ops.h5";
-                 "Data/for_antor/h5_folder/SVDNB_j01_d20211104_t1305211_e1306456_b20532_c20211104135250660569_oeac_ops.h5";
-                 "Data/for_antor/h5_folder/SVDNB_j01_d20211105_t1105259_e1106504_b20545_c20211105114221215058_oebc_ops.h5";
-                 "Data/for_antor/h5_folder/SVDNB_j01_d20211105_t1245003_e1246248_b20546_c20211105133316027056_oebc_ops.h5";
-                 "Data/for_antor/2022/jan_2/SVDNB_j01_d20220101_t1136251_e1137496_b21354_c20220101122349316554_oeac_ops.h5";
-                 "Data/for_antor/2022/jan_2/SSVDNB_j01_d20220101_t1315594_e1317239_b21355_c20220101140502951468_oeac_ops.h5";
-                 "Data/for_antor/2022/jan_2/SVDNB_j01_d20220102_t1116042_e1117287_b21368_c20220102120610323500_oeac_ops.h5";
-                 "Data/for_antor/2022/jan_2/SVDNB_j01_d20220102_t1257043_e1258288_b21369_c20220102134718014180_oeac_ops.h5";
-                 "Data/for_antor/2022/jan_2/SVDNB_j01_d20220103_t1239332_e1240577_b21383_c20220103133420759046_oeac_ops.h5";
-                 "Data/for_antor/2022/jan_2/SVDNB_j01_d20220103_t1417436_e1419063_b21384_c20220103150535888778_oeac_ops.h5";
-                 "Data/for_antor/2022/jan_31/SVDNB_j01_d20220130_t1233389_e1235035_b21766_c20220130132012193886_oecc_ops.h5";
-                 "Data/for_antor/2022/jan_31/SVDNB_j01_d20220130_t1411475_e1413121_b21767_c20220130150056413695_oecc_ops.h5";
-                 "Data/for_antor/2022/jan_31/SVDNB_j01_d20220131_t1213181_e1214426_b21780_c20220131124928108109_oecc_ops.h5";
-                 "Data/for_antor/2022/jan_31/SVDNB_j01_d20220131_t1352524_e1354170_b21781_c20220131143939382775_oecc_ops.h5";
-                 "Data/for_antor/2022/jan_31/SVDNB_j01_d20220201_t1154230_e1155475_b21794_c20220201124216268100_oecc_ops.h5";
-                 "Data/for_antor/2022/jan_31/SVDNB_j01_d20220201_t1333573_e1335218_b21795_c20220201142258312243_oecc_ops.h5"
-                 ];
-             
-             
-             
+    PWD = ('/Users/antor/Documents/EOG/Codes/dark_frames/Data/for_antor/h5_folder/');
+    fid = fopen('/Users/antor/Documents/EOG/Codes/dark_frames/Data/for_antor/h5_names.txt');
+    
+    tline = fgetl(fid);
+    filenames = {};
+    while ischar(tline)
+        filenames{end+1,1} = strcat(PWD,tline);
+        tline = fgetl(fid);
+    end
+    fclose(fid);    
+                 
     n = size(filenames, 1);
     
     %% SNPP DNB day-night band
@@ -65,11 +48,11 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_concat()
         dnbdataset = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
         
         if i == 1
-            dnbdata = viirs_get_data(filenames(1), dnbdataset)' * 1e9;
+            dnbdata = viirs_get_data(filenames{1}, dnbdataset)' * 1e9;
         
         else
 
-            read_dnbdata = viirs_get_data(filenames(1), dnbdataset)' * 1e9;
+            read_dnbdata = viirs_get_data(filenames{i}, dnbdataset)' * 1e9;
             
             dnbdata = vertcat(dnbdata, read_dnbdata);        
         end
@@ -82,7 +65,7 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_concat()
     
     
     %%
-    type = 'SNPP';
+    type = 'J01';
     degree = 3;
     color = 'b';
     %legends{end+1} = '';
@@ -196,10 +179,10 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_concat()
 
     dnbdata_2 = dnbdata;
 
-    a = 320;
-    b = 3905;
-    %a = 1;
-    %b = 4064;
+    %a = 80;
+    %b = 3881;
+    a = 1;
+    b = 4064;
     trimmed_range = a:b;
     dnbdata_2(:,1:a-1) = [];
 

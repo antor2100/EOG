@@ -1,6 +1,6 @@
 %%
 function [] = multiple_h5_smi_and_steps_mark_spikes_10()
-    SMI = 0.25;
+    SMI = 0.09;
     
     legends = {};
    
@@ -37,7 +37,7 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_10()
     end
     fclose(fid);
             
-    type = 'SNPP';
+    type = 'J01';
     degree = 3;
              
     colors = ['r' 'g' 'b' 'm' 'y' 'k'];
@@ -174,10 +174,12 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_10()
         
         dnbdata_2 = dnbdata;
 
-        a = 320;
-        b = 3905;
+        a = 10;
+        %b = 4054;
         %a = 1;
-        %b = 4064;
+        b = 4064;
+        
+        
         trimmed_range = a:b;
         dnbdata_2(:,1:a-1) = [];
 
