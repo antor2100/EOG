@@ -282,6 +282,8 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_10()
         af3 = single(wiener2(dnbdata,[3 3],SCALE*sigmanoiseSNPP));
         af3(:,1:a) = 0;          % do not detect boats at the outskirts
         af3(:,b:4064) = 0;      % do not detect boats at the outskirts
+        %disp(filename);
+        %imwrite(double(af3), [filename,'Wiener.tif'], 'Compression','none');
 
         %% Find SMI spikes
         

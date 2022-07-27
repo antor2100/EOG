@@ -1,0 +1,67 @@
+#!/bin/bash
+#
+aggname=$1
+#echo $aggname
+
+h5_dir=$2
+
+#search for files in reverse order, so newest on top
+svdnb_fnames=($(ls -r $h5_dir/SVDNB*$aggname*h5))
+gdnbo_fnames=($(ls -r $h5_dir/GDNBO*$aggname*h5))
+svi04_fnames=($(ls -r $h5_dir/SVI04*$aggname*h5))
+svi05_fnames=($(ls -r $h5_dir/SVI05*$aggname*h5))
+
+if [ ${#svdnb_fnames[@]} -ne 0 ] && [ ${#gdnbo_fnames[@]} -ne 0 ] &&  [ ${#svi04_fnames[@]} -ne 0 ] ; then
+
+  svdnb_fname=${svdnb_fnames[0]}
+  gdnbo_fname=${gdnbo_fnames[0]}
+  svi04_fname=${svi04_fnames[0]}
+  bname=$(basename $svi04_fname h5)
+  svi04_dspace_fname=$h5_dir/$bname'dspace_rad'
+  li_fname=$gdnbo_fname"_li"
+  
+  
+  date_string=`date +%Y%m%d%H%M%S%N`
+
+  matlab_root=/beegfs/sets/eog/reference/matlab/vbd_utils
+  matlab_mcr=/beegfs/sets/eog/reference/matlab_mcr/v95
+  reproj_sh=$matlab_root/reproject/reproject.sh
+
+  if [ -e $li_fname ]
+    then echo "LI file exists"
+    else $matlab_root/run_ngdc_viirs_li.sh $matlab_mcr $gdnbo_fname $li_fname
+  fi
+
+  if [ -e $svi04_dspace_fname ]
+    then echo "D-space I4 file exists"
+    else
+	echo $matlab_root/run_ngdc_viirs_reproj_to_dnb.sh $matlab_mcr $svi04_fname $svdnb_fname $svi04_dspace_fname -data_name All_Data/VIIRS_I4-SDR_All/Radiance -run_line $reproj_sh 
+	$matlab_root/run_ngdc_viirs_reproj_to_dnb.sh $matlab_mcr $svi04_fname $svdnb_fname $svi04_dspace_fname -data_name All_Data/VIIRS_I4-SDR_All/Radiance -run_line $reproj_sh || \
+	$matlab_root/run_ngdc_viirs_reproj_to_dnb.sh $matlab_mcr $svi04_fname $svdnb_fname $svi04_dspace_fname -data_name All_Data/VIIRS_I4-SDR_All/Radiance -run_line $reproj_sh
+  fi
+fi
+
+if [ ${#svdnb_fnames[@]} -ne 0 ] && [ ${#gdnbo_fnames[@]} -ne 0 ] &&  [ ${#svi05_fnames[@]} -ne 0 ] ; then
+
+  svdnb_fname=${svdnb_fnames[0]}
+  gdnbo_fname=${gdnbo_fnames[0]}
+  svi05_fname=${svi05_fnames[0]}
+  bname=$(basename $svi05_fname h5)
+  svi05_dspace_fname=$h5_dir/$bname'dspace_rad'
+  li_fname=$gdnbo_fname"_li"
+
+
+  date_string=`date +%Y%m%d%H%M%S%N`
+
+  matlab_root=/beegfs/sets/eog/reference/matlab/vbd_utils
+  matlab_mcr=/beegfs/sets/eog/reference/matlab_mcr/v95
+  reproj_sh=$matlab_root/reproject/reproject.sh
+
+  if [ -e $svi05_dspace_fname ]
+    then echo "D-space I5 file exists"
+    else 
+	echo $matlab_root/run_ngdc_viirs_reproj_to_dnb.sh $matlab_mcr $svi05_fname $svdnb_fname $svi05_dspace_fname -data_name All_Data/VIIRS_I5-SDR_All/Radiance -run_line $reproj_sh
+	$matlab_root/run_ngdc_viirs_reproj_to_dnb.sh $matlab_mcr $svi05_fname $svdnb_fname $svi05_dspace_fname -data_name All_Data/VIIRS_I5-SDR_All/Radiance -run_line $reproj_sh || \
+	$matlab_root/run_ngdc_viirs_reproj_to_dnb.sh $matlab_mcr $svi05_fname $svdnb_fname $svi05_dspace_fname -data_name All_Data/VIIRS_I5-SDR_All/Radiance -run_line $reproj_sh
+  fi
+fi

@@ -51,7 +51,7 @@ end
 
 %% SNPP DNB day-night band
 % dnbfile = 'SVDNB_npp_d20170128_t1255482_e1301286_b27228_c20170128190129026938_noaa_ops.h5';
- dnbfile = 'for_antor/2022/SVDNB_npp_d20220430_t1334313_e1335555_b54440_c20220430150901529459_oebc_ops.h5';
+ dnbfile = 'Data/for_antor/h5_folder/SVDNB_npp_d20220430_t1334313_e1335555_b54440_c20220430150901529459_oebc_ops.h5';
 
 % DNB radiance
 dnbdataset = '/All_Data/VIIRS-DNB-SDR_All/Radiance';
@@ -108,7 +108,7 @@ sigmanoiseSNPP = polyval(p,1:4064);
 SCALE = 1;
 af3 = single(wiener2(dnbdata,[3 3],SCALE*sigmanoiseSNPP));
 
-%imwrite(double(af3), [dnbfile,'Wiener.tif'], 'Compression','none');
+imwrite(double(af3), [dnbfile,'Wiener.tif'], 'Compression','none');
 
 %af3(:,1:464) = 0;
 % af3(:,3328:4064) = 0;

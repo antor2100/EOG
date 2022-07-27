@@ -372,6 +372,42 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_concat()
     set(hl,'LineWidth',1);
     
     
+    %% STD
+    
+    figure();
+    legends = {};
+
+    [Line_DNB,Sample_DNB] = find(imgfilt > -1000);
+
+    color = strcat('b','.');
+
+    plot(Sample_DNB,imgfilt(imgfilt > -1000), color)
+    legends{end+1} = 'concatenated';
+
+    hold on
+
+    color = strcat('g','--');
+
+    plot(polyvar,color,'LineWidth',2,'DisplayName','Wiener Sigma')
+    legends{end+1} = '';
+
+    for j=1:32
+        vline(ranges(2,j))                                 % Misha will send me the code for vline function. it will just draw vertical lines.
+        vline(4064-ranges(2,j))
+    end
+    
+    ylim([-0.8,0.8])
+    xlim([-36,4100])
+
+    xlabel(strcat(type, ' DNB sample'))
+    ylabel('SMI')
+    %legend(strcat(h5_1," Degree: ", string(degree_1)), strcat(h5_2," Degree: ", string(degree_2)))
+    
+    [~, hobj, ~, ~] = legend(legends, 'NumColumns',2, 'Location','best')
+    hl = findobj(hobj,'type','patch');
+    set(hl,'LineWidth',1);
+    
+    
 end
     
     
