@@ -251,6 +251,19 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_concat(sat_type, SMI, degree
 
     sigmanoiseSNPP = polyval(p,goodrange);
 
+    %% Update csv file
+    opts = detectImportOptions('granule_summary.csv','NumHeaderLines',0);
+    output = readtable('granule_summary.csv', opts);
+
+    coeff = "";
+
+    for j = 2:(degree+1)
+        coeff = strcat(coeff, string(p(j)), "; ");
+    end
+
+    row = {'concatenated', '', 0, '', '', 0, 0, coeff, 0, 0, 0, 0};
+    output = [output; row];
+    writetable(output, 'granule_summary.csv'); 
 
     %%
     SCALE = 1;
