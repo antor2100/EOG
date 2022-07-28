@@ -1,1 +1,1 @@
-# Mines Earth Observation Group
+# EOG
