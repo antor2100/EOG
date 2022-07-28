@@ -1,8 +1,16 @@
-from openpyxl import load_workbook
+#from openpyxl import load_workbook
+import openpyxl
 import csv
 import sys
 
-wb = load_workbook(filename = 'test.xlsx')
+print(sys.argv[2])
+
+if sys.argv[2] == "1":
+	name = "snpp_mooncycles.xlsx"
+elif sys.argv[2] == "2":
+	name = "j01_mooncycles.xlsx"
+print(name)
+wb = openpyxl.load_workbook(filename = name)
 
 try:
 	del wb[sys.argv[1]]
@@ -18,4 +26,40 @@ with open('granule_summary.csv') as file_obj:
     for row in reader_obj:
         ws.append(row)
 
-wb.save(filename = 'test.xlsx')
+img = openpyxl.drawing.image.Image('images/smi.png')
+img.width = 700
+img.height = 512
+img.anchor = 'B10'
+ws.add_image(img)
+
+img = openpyxl.drawing.image.Image('images/std.png')
+img.width = 700
+img.height = 512
+img.anchor = 'B37'
+ws.add_image(img)
+
+img = openpyxl.drawing.image.Image('images/bowtie.png')
+img.width = 700
+img.height = 512
+img.anchor = 'B64'
+ws.add_image(img)
+
+img = openpyxl.drawing.image.Image('images/concat_smi.png')
+img.width = 700
+img.height = 512
+img.anchor = 'M10'
+ws.add_image(img)
+
+img = openpyxl.drawing.image.Image('images/concat_std.png')
+img.width = 700
+img.height = 512
+img.anchor = 'M37'
+ws.add_image(img)
+
+img = openpyxl.drawing.image.Image('images/concat_bowtie.png')
+img.width = 700
+img.height = 512
+img.anchor = 'M64'
+ws.add_image(img)
+
+wb.save(filename = name)

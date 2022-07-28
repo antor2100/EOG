@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# ./run_granule_analysis granule_name smi degree
+
 filenames=$(cat batch.txt)
 cp batch.txt granule_names.txt
 
@@ -21,6 +23,16 @@ ls h5_folder > h5_names.txt
 
 echo 'filename', 'granule_name', 'YMD', 'start_time', 'end_time', 'id', 'degree', 'coeff', 'ltrim', 'rtrim', 'SMI', 'null' > granule_summary.csv
 
-/Applications/MATLAB_R2021a.app/bin/matlab -nodesktop -nosplash -r "matlab_code; exit"
+if [ $sat_type = "npp" ];
+then
+	sat_type=1
+elif [ $sat_type = "j01" ];
+then
+	sat_type=2
+fi
 
-python3 save_to_excel.py argv[1]
+/Applications/MATLAB_R2021a.app/bin/matlab -nodesktop -nosplash -r "individual_matlab_code($sat_type,$2,$3); exit"
+
+/Applications/MATLAB_R2021a.app/bin/matlab -nodesktop -nosplash -r "concat_matlab_code($sat_type,$2,$3); exit"
+
+python3 save_to_excel.py $1 $sat_type
