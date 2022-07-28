@@ -3,13 +3,11 @@ import openpyxl
 import csv
 import sys
 
-print(sys.argv[2])
-
 if sys.argv[2] == "1":
 	name = "snpp_mooncycles.xlsx"
 elif sys.argv[2] == "2":
 	name = "j01_mooncycles.xlsx"
-print(name)
+
 wb = openpyxl.load_workbook(filename = name)
 
 try:

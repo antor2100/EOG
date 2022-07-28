@@ -33,6 +33,6 @@ fi
 
 /Applications/MATLAB_R2021a.app/bin/matlab -nodesktop -nosplash -r "individual_matlab_code($sat_type,$2,$3); exit"
 
-/Applications/MATLAB_R2021a.app/bin/matlab -nodesktop -nosplash -r "concat_matlab_code($sat_type,$2,$3); exit"
+/Applications/MATLAB_R2021a.app/bin/matlab -nodesktop -nosplash -r "concat_matlab_code_new($sat_type,$2,$3); exit"
 
 python3 save_to_excel.py $1 $sat_type

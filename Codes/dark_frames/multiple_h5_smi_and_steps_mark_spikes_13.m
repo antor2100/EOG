@@ -1,6 +1,6 @@
 %%
 function [] = multiple_h5_smi_and_steps_mark_spikes_13()
-    SMI = 0.2;
+    SMI = 0.125;
     
     legends = {};
    
@@ -48,8 +48,8 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_13()
     end
     fclose(fid);
             
-    type = 'SNPP';
-    degree = 4;
+    type = 'J01';
+    degree = 3;
              
     colors = ['r' 'g' 'b' 'm' 'y' 'k'];
     %colors = ['r' 'g' 'b' 'm' 'y' 'k' 'r' 'g' 'b' 'm' 'y' 'k' 'r' 'g' 'b' 'm'];
@@ -315,6 +315,7 @@ function [] = multiple_h5_smi_and_steps_mark_spikes_13()
         if b < 4064
             af3(:,b:4064) = 0;      % do not detect boats at the outskirts
         end
+        
         %disp(filename);
         %imwrite(double(dnbdata), [filename,'no_Wiener.tif'], 'Compression','none');
         %imwrite(double(af3), [filename,'Wiener.tif'], 'Compression','none');
